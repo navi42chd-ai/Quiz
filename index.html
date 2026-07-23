@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#4f46e5" />
+  <title>QuizHub — Practice MCQs</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="js/subjects.js"></script>
+  <script src="data/ancient-history/ch01-stone-age.js"></script>
+</head>
+<body>
+<button id="btn-reattempt" class="btn-reattempt" onclick="startReattempt()" style="display:none">↻ Wrong questions <span id="reattempt-count" class="reattempt-count">0</span></button>
+<div class="app-wrap">
+  <header class="app-header">
+    <div class="brand-mark">Q</div>
+    <div>
+      <div class="logo">Quiz<span>Hub</span></div>
+      <div class="mini-tag">SSC PRACTICE</div>
+    </div>
+  </header>
+
+  <section id="screen-subject" class="screen">
+    <div class="page-heading">
+      <div class="eyebrow">QUESTION BANK</div>
+      <h1>Choose a subject</h1>
+      <p>Select a subject to view its chapters and begin practising.</p>
+    </div>
+    <div class="card-grid" id="subject-grid"></div>
+  </section>
+
+  <section id="screen-chapter" class="screen">
+    <nav class="breadcrumb"><span class="bc-link" onclick="goSubjects()">Home</span><span class="bc-sep">›</span><span class="bc-current" id="chapter-subject-title"></span></nav>
+    <div class="chapter-header">
+      <div class="chapter-header-icon" id="chapter-subject-icon"></div>
+      <div><div class="eyebrow">CHAPTERS</div><h1 class="section-title" id="chapter-page-title">Choose a chapter</h1></div>
+    </div>
+    <div class="card-grid" id="chapter-grid"></div>
+  </section>
+
+  <section id="screen-quiz" class="screen quiz-fullscreen">
+    <div class="quiz-top">
+      <div class="quiz-title-row">
+        <nav class="breadcrumb" id="quiz-breadcrumb"></nav>
+        <button class="btn-goto" onclick="openGotoModal()">Question map</button>
+      </div>
+      <div class="quiz-meta-row"><span class="prog-text" id="prog-text">Q 1 / 242</span><span class="prog-attempted" id="prog-attempted">0 attempted</span></div>
+      <div class="prog-track"><div class="prog-fill" id="prog-bar"></div></div>
+    </div>
+    <main class="quiz-body">
+      <div class="question-shell">
+        <div class="q-kicker" id="q-kicker">MCQ</div>
+        <p class="q-text" id="q-text"></p>
+        <div class="options-list" id="options"></div>
+      </div>
+    </main>
+    <footer class="quiz-footer">
+      <button class="btn btn-outline btn-prev" id="btn-prev" onclick="prevQuestion()" style="display:none">← Previous</button>
+      <button class="btn btn-next" id="btn-next" onclick="nextQuestion()" style="display:none">Next →</button>
+      <button class="btn btn-end" id="btn-end" onclick="endQuiz()" style="display:none">Finish quiz →</button>
+    </footer>
+  </section>
+
+  <section id="screen-result" class="screen">
+    <nav class="breadcrumb" id="result-breadcrumb"></nav>
+    <div class="result-card"><div class="result-ring"><div class="result-pct" id="res-pct">—</div></div><div class="result-grade" id="res-grade"></div><div class="result-chapter-label" id="res-chapter"></div><div class="result-stats"><div class="stat-box"><div class="stat-num good" id="res-correct">0</div><div class="stat-lbl">Correct</div></div><div class="stat-box"><div class="stat-num bad" id="res-wrong">0</div><div class="stat-lbl">Wrong</div></div><div class="stat-box"><div class="stat-num" id="res-skipped">0</div><div class="stat-lbl">Skipped</div></div><div class="stat-box"><div class="stat-num" id="res-attempted">0</div><div class="stat-lbl">Attempted</div></div><div class="stat-box"><div class="stat-num" id="res-total">0</div><div class="stat-lbl">Total</div></div><div class="stat-box"><div class="stat-num" id="res-time">—</div><div class="stat-lbl">Time</div></div></div><div class="result-actions"><button class="btn" onclick="retryQuiz()">↻ Retry chapter</button><button class="btn btn-outline" onclick="goChapters()">← Chapters</button><button class="btn btn-outline" onclick="goSubjects()">⌂ Home</button></div></div>
+  </section>
+</div>
+
+<div id="goto-modal" class="modal-backdrop"><div class="modal-box"><div class="modal-icon">#</div><div class="modal-title">Jump to a question</div><div class="modal-sub" id="goto-range">Enter a question number</div><input id="goto-input" class="modal-input" type="number" min="1" placeholder="e.g. 142" /><div class="modal-error" id="goto-error"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeGotoModal()">Cancel</button><button class="btn" onclick="submitGoto()">Go →</button></div></div></div>
+<script src="js/quiz.js"></script>
+</body>
+</html>
