@@ -18,6 +18,12 @@ const SUBJECTS = [
         label: 'Indus Valley Civilisation',
         subtitle: '331 one-liner based MCQs',
         dataVar: 'chapter_indus_valley'
+      },
+      {
+        id: 'vedic-age',
+        label: 'Vedic Age',
+        subtitle: '396 one-liner based MCQs',
+        dataVar: 'chapter_vedic_age'
       }
     ]
   }
