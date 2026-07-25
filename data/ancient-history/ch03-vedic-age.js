@@ -16,9 +16,9 @@ window.chapter_vedic_age = {
       "q": "The Vedic Age is divided into how many / what parts?",
       "opts": [
         "The Early Vedic Age and the Later Vedic Age",
-        "Yajurveda primarily contains mantras",
-        "The Later Vedic period",
-        "Associated with the Samaveda"
+        "The Rig Vedic Age and the Epic Age",
+        "The Bronze Age and the Iron Age",
+        "The Vedic Age and the Puranic Age"
       ],
       "ans": 0,
       "exp": "The Vedic Age is divided into the Early Vedic Age and the Later Vedic Age."
@@ -27,9 +27,9 @@ window.chapter_vedic_age = {
       "q": "The Early Vedic Age is also known as which of the following?",
       "opts": [
         "The Rig Vedic Age",
-        "With the Krishna Yajurveda",
-        "No rigid caste system",
-        "Marrying a lower-caste man"
+        "The Later Vedic Age",
+        "The Epic Age",
+        "The Puranic Age"
       ],
       "ans": 0,
       "exp": "The Early Vedic Age is also known as the Rig Vedic Age."
@@ -148,9 +148,9 @@ window.chapter_vedic_age = {
       "q": "Who wrote The Arctic Home in the Vedas?",
       "opts": [
         "Bal Gangadhar Tilak",
-        "The Later Vedic period",
-        "Than the Mandukya Upanishad",
-        "Based on tribal kinship"
+        "Max Muller",
+        "Mortimer Wheeler",
+        "R. C. Majumdar"
       ],
       "ans": 0,
       "exp": "Bal Gangadhar Tilak wrote The Arctic Home in the Vedas."
@@ -170,9 +170,9 @@ window.chapter_vedic_age = {
       "q": "The word Veda is derived from which Sanskrit root?",
       "opts": [
         "Vid",
-        "With early iron use",
-        "The Early Vedic period",
-        "Based on tribal kinship"
+        "Yaj",
+        "Bhu",
+        "Kri"
       ],
       "ans": 0,
       "exp": "The word Veda is derived from the Sanskrit root Vid."
@@ -181,9 +181,9 @@ window.chapter_vedic_age = {
       "q": "What does the Sanskrit root Vid mean?",
       "opts": [
         "To know",
-        "With the Shukla Yajurveda",
-        "The forces of nature",
-        "Approved form of marriage"
+        "To sacrifice",
+        "To praise",
+        "To create"
       ],
       "ans": 0,
       "exp": "The Sanskrit root Vid means to know."
@@ -335,9 +335,9 @@ window.chapter_vedic_age = {
       "q": "What does Shruti mean?",
       "opts": [
         "That which is heard",
-        "The largest Brahmana text",
-        "Primarily a tribal chief",
-        "Occurs in the Rigveda"
+        "That which is remembered",
+        "That which is seen",
+        "That which is memorised"
       ],
       "ans": 0,
       "exp": "Shruti means that which is heard."
@@ -423,9 +423,9 @@ window.chapter_vedic_age = {
       "q": "What does Vedanta literally mean?",
       "opts": [
         "The end of the Vedas",
-        "Was the chief priest",
-        "Atharvaveda was called Brahman",
-        "Concerned with poetic metre"
+        "The beginning of the Vedas",
+        "The essence of the Vedas",
+        "The interpretation of the Vedas"
       ],
       "ans": 0,
       "exp": "Vedanta literally means the end of the Vedas."
@@ -478,9 +478,9 @@ window.chapter_vedic_age = {
       "q": "What does The Rigveda contain?",
       "opts": [
         "The oldest and largest collection of Sanskrit hymns",
-        "The Early Vedic period",
-        "The Later Vedic period",
-        "Based on tribal kinship"
+        "Mantras used during sacrifices",
+        "Melodies and chants for music",
+        "Magical formulas and spells"
       ],
       "ans": 0,
       "exp": "The Rigveda contains the oldest and largest collection of Sanskrit hymns."
@@ -577,9 +577,9 @@ window.chapter_vedic_age = {
       "q": "What was Indra known as?",
       "opts": [
         "Purandara",
-        "Associated with the Samaveda",
-        "Involved marriage by abduction",
-        "Central Asia towards Europe"
+        "Varuna",
+        "Agni",
+        "Rudra"
       ],
       "ans": 0,
       "exp": "Indra was known as Purandara."
@@ -1061,9 +1061,9 @@ window.chapter_vedic_age = {
       "q": "What does The Yajurveda contain?",
       "opts": [
         "Mantras used during sacrifices",
-        "Associated with the Samaveda",
-        "Divided into ten Mandalas",
-        "The goddess of fertility"
+        "The oldest and largest collection of Sanskrit hymns",
+        "Melodies and chants for music",
+        "Magical formulas and spells"
       ],
       "ans": 0,
       "exp": "The Yajurveda contains mantras used during sacrifices."
@@ -1083,9 +1083,9 @@ window.chapter_vedic_age = {
       "q": "The Yajurveda is divided into how many / what parts?",
       "opts": [
         "Two main branches",
-        "Important Later Vedic deity",
-        "Vedic god of fire",
-        "Religious rituals and sacrifices"
+        "Three main branches",
+        "Four main branches",
+        "Ten Mandalas"
       ],
       "ans": 0,
       "exp": "The Yajurveda is divided into two main branches."
@@ -1105,9 +1105,9 @@ window.chapter_vedic_age = {
       "q": "What does Shukla Yajurveda mean?",
       "opts": [
         "The White or Pure Yajurveda",
-        "Study of celestial lights",
-        "The Later Vedic period",
-        "Associated with the Samaveda"
+        "The Black or Mixed Yajurveda",
+        "The Ancient Yajurveda",
+        "The Combined Yajurveda"
       ],
       "ans": 0,
       "exp": "Shukla Yajurveda means the White or Pure Yajurveda."
@@ -1116,9 +1116,9 @@ window.chapter_vedic_age = {
       "q": "What does Shukla Yajurveda primarily contain?",
       "opts": [
         "Mantras",
-        "The Early Vedic period",
-        "The Later Vedic period",
-        "Occurs in the Rigveda"
+        "Melodies and chants",
+        "Magical formulas and spells",
+        "Hymns of praise"
       ],
       "ans": 0,
       "exp": "Shukla Yajurveda primarily contains mantras."
@@ -1127,9 +1127,9 @@ window.chapter_vedic_age = {
       "q": "What does Krishna Yajurveda mean?",
       "opts": [
         "The Black or Mixed Yajurveda",
-        "Formed the Kuru-Panchala region",
-        "In the varna hierarchy",
-        "Of the common people"
+        "The White or Pure Yajurveda",
+        "The Ancient Yajurveda",
+        "The Combined Yajurveda"
       ],
       "ans": 0,
       "exp": "Krishna Yajurveda means the Black or Mixed Yajurveda."
@@ -1204,9 +1204,9 @@ window.chapter_vedic_age = {
       "q": "What does The Brihadaranyaka Upanishad contain?",
       "opts": [
         "Discussions involving Gargi Vachaknavi",
-        "Vedic kingship became hereditary",
-        "From the Mundaka Upanishad",
-        "Learning and disciplined life"
+        "The story of Nachiketa and Yama",
+        "Explanations of the four Ashramas of life",
+        "The expression Satyameva Jayate"
       ],
       "ans": 0,
       "exp": "The Brihadaranyaka Upanishad contains discussions involving Gargi Vachaknavi."
@@ -1248,9 +1248,9 @@ window.chapter_vedic_age = {
       "q": "What does The Katha Upanishad contain?",
       "opts": [
         "The story of Nachiketa and Yama",
-        "Oldest surviving Indo-Aryan text",
-        "Approved form of marriage",
-        "Religious rituals and sacrifices"
+        "Discussions involving Gargi Vachaknavi",
+        "Explanations of the four Ashramas of life",
+        "The expression Satyameva Jayate"
       ],
       "ans": 0,
       "exp": "The Katha Upanishad contains the story of Nachiketa and Yama."
@@ -1314,9 +1314,9 @@ window.chapter_vedic_age = {
       "q": "What does The Atharvaveda contain?",
       "opts": [
         "Magical formulas and spells",
-        "Sang the Saman melodies",
-        "Associated with the Gandharvaveda",
-        "The guardian of Rita"
+        "The oldest and largest collection of Sanskrit hymns",
+        "Mantras used during sacrifices",
+        "Melodies and chants for music"
       ],
       "ans": 0,
       "exp": "The Atharvaveda contains magical formulas and spells."
@@ -1446,9 +1446,9 @@ window.chapter_vedic_age = {
       "q": "What does Vasudhaiva Kutumbakam mean?",
       "opts": [
         "The whole world is one family",
-        "People were primarily pastoral",
-        "Marrying a lower-caste woman",
-        "Was grey in colour"
+        "Knowledge is the highest wealth",
+        "Truth alone triumphs",
+        "Duty above all else"
       ],
       "ans": 0,
       "exp": "Vasudhaiva Kutumbakam means The whole world is one family."
@@ -1864,9 +1864,9 @@ window.chapter_vedic_age = {
       "q": "What was The region occupied by the Rig Vedic Aryans known as?",
       "opts": [
         "Sapta Sindhu",
-        "Sovereignty of a king",
-        "Of body and mind",
-        "Of Nachiketa and Yama"
+        "Aryavarta",
+        "Madhyadesha",
+        "Brahmarshi Desha"
       ],
       "ans": 0,
       "exp": "The region occupied by the Rig Vedic Aryans was known as Sapta Sindhu."
@@ -1875,9 +1875,9 @@ window.chapter_vedic_age = {
       "q": "What does Sapta Sindhu mean?",
       "opts": [
         "The land of seven rivers",
-        "Known as the Rajan",
-        "Of the Gangetic plains",
-        "An important tribal assembly"
+        "The land of five rivers",
+        "The land of the two seas",
+        "The land of the black soil"
       ],
       "ans": 0,
       "exp": "Sapta Sindhu means the land of seven rivers."
@@ -2051,9 +2051,9 @@ window.chapter_vedic_age = {
       "q": "Who was the leader of the Bharata tribe?",
       "opts": [
         "Sudas",
-        "Of Nachiketa and Yama",
-        "Associated with the Samaveda",
-        "The Early Vedic period"
+        "Divodasa",
+        "Trasadasyu",
+        "Sushravas"
       ],
       "ans": 0,
       "exp": "Sudas was the leader of the Bharata tribe."
@@ -2348,9 +2348,9 @@ window.chapter_vedic_age = {
       "q": "What did Gavishti literally refer to?",
       "opts": [
         "A search or struggle for cows",
-        "Described as naturalistic polytheism",
-        "The Later Vedic period",
-        "Producing and tax-paying class"
+        "A tribal assembly for justice",
+        "A sacrifice for royal power",
+        "A hymn of praise to Indra"
       ],
       "ans": 0,
       "exp": "Gavishti literally referred to a search or struggle for cows."
@@ -2678,9 +2678,9 @@ window.chapter_vedic_age = {
       "q": "What was Indra called?",
       "opts": [
         "Purandara or the destroyer of forts",
-        "The Early Vedic period",
-        "The god of water",
-        "To the bride's father"
+        "Varuna, the guardian of Rita",
+        "Agni, the god of fire",
+        "Rudra, the protector of cattle"
       ],
       "ans": 0,
       "exp": "Indra was called Purandara or the destroyer of forts."
@@ -2844,8 +2844,8 @@ window.chapter_vedic_age = {
       "opts": [
         "Later Vedic period",
         "Early Vedic period",
-        "Referred to a tribe",
-        "Use of iron weapons"
+        "Mauryan period",
+        "Gupta period"
       ],
       "ans": 0,
       "exp": "The Samaveda was compiled during the Later Vedic period."
@@ -2855,8 +2855,8 @@ window.chapter_vedic_age = {
       "opts": [
         "Later Vedic period",
         "Early Vedic period",
-        "The Later Vedic period",
-        "Involved marriage by abduction"
+        "Mauryan period",
+        "Gupta period"
       ],
       "ans": 0,
       "exp": "The Yajurveda was compiled during the Later Vedic period."
@@ -2986,9 +2986,9 @@ window.chapter_vedic_age = {
       "q": "What was Iron known as?",
       "opts": [
         "Krishna Ayas during the Later Vedic period",
-        "Of Nachiketa and Yama",
-        "Described as black magic",
-        "To understand the Vedas"
+        "Rajata, the Sanskrit word for silver",
+        "Tamra, the Sanskrit word for copper",
+        "Kanchana, the Sanskrit word for gold"
       ],
       "ans": 0,
       "exp": "Iron was known as Krishna Ayas during the Later Vedic period."
@@ -2997,9 +2997,9 @@ window.chapter_vedic_age = {
       "q": "What does Krishna Ayas mean?",
       "opts": [
         "Black metal",
-        "Consent of the woman",
-        "Was the village head",
-        "Were sung during sacrifices"
+        "White metal",
+        "Red metal",
+        "Yellow metal"
       ],
       "ans": 0,
       "exp": "Krishna Ayas means black metal."
@@ -3038,12 +3038,12 @@ window.chapter_vedic_age = {
       "exp": "The first significant evidence of iron in the Gangetic region comes from sites such as Atranjikhera."
     },
     {
-      "q": "What does Agriculture became the chief mean?",
+      "q": "What became the chief means of livelihood during the Later Vedic period?",
       "opts": [
-        "Of livelihood during the Later Vedic period",
-        "Mentioned in the Rigveda",
-        "With early iron use",
-        "Growing importance of rituals"
+        "Agriculture",
+        "Cattle-rearing",
+        "Trade",
+        "Hunting"
       ],
       "ans": 0,
       "exp": "Agriculture became the chief means of livelihood during the Later Vedic period."
@@ -3063,9 +3063,9 @@ window.chapter_vedic_age = {
       "q": "What was Rice known as?",
       "opts": [
         "Vrihi",
-        "Use of iron weapons",
-        "Society was comparatively egalitarian",
-        "Was not initially hereditary"
+        "Yava",
+        "Godhuma",
+        "Masura"
       ],
       "ans": 0,
       "exp": "Rice was known as Vrihi."
@@ -3779,8 +3779,7 @@ window.chapter_vedic_age = {
       "opts": [
         "Rajasuya Yajna",
         "Ashvamedha Yajna",
-        "Vajapeya Yajna",
-        "Symbolically in agricultural labour"
+        "Vajapeya Yajna"
       ],
       "ans": 0,
       "exp": "The Rajasuya Yajna was performed for the coronation of a king."
@@ -3811,9 +3810,9 @@ window.chapter_vedic_age = {
       "q": "What does Vajapeya literally mean?",
       "opts": [
         "Drink of strength",
-        "The Early Vedic period",
-        "As the forest texts",
-        "Varna system became hereditary"
+        "Horse of victory",
+        "Wheel of fortune",
+        "Fire of purification"
       ],
       "ans": 0,
       "exp": "Vajapeya literally means drink of strength."
@@ -3834,8 +3833,7 @@ window.chapter_vedic_age = {
       "opts": [
         "Ashvamedha Yajna",
         "Vajapeya Yajna",
-        "Rajasuya Yajna",
-        "Was known as Purandara"
+        "Rajasuya Yajna"
       ],
       "ans": 0,
       "exp": "The Ashvamedha Yajna was the horse-sacrifice."
@@ -3845,8 +3843,7 @@ window.chapter_vedic_age = {
       "opts": [
         "Ashvamedha Yajna",
         "Vajapeya Yajna",
-        "Rajasuya Yajna",
-        "Of the Sutlej River"
+        "Rajasuya Yajna"
       ],
       "ans": 0,
       "exp": "The Ashvamedha Yajna was performed for territorial expansion."
