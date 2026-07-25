@@ -5,9 +5,9 @@ window.chapter_indus_valley = {
       "q": "The Indus Valley Civilisation is also known as which of the following?",
       "opts": [
         "The Harappan Civilisation",
-        "Was found at Mohenjo-daro",
-        "Were made of faience",
-        "From right to left"
+        "The Mesopotamian Civilisation",
+        "The Egyptian Civilisation",
+        "The Vedic Civilisation"
       ],
       "ans": 0,
       "exp": "The Indus Valley Civilisation is also known as the Harappan Civilisation."
@@ -281,8 +281,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Early Harappan",
         "Mature Harappan",
-        "Late Harappan",
-        "Of the Bhogava River"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Kot Diji was an Early Harappan site."
@@ -291,9 +290,8 @@ window.chapter_indus_valley = {
       "q": "Amri was a site belonging to which Harappan phase?",
       "opts": [
         "Early Harappan",
-        "Late Harappan",
         "Mature Harappan",
-        "Cultivated by the Harappans"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Amri was an Early Harappan site."
@@ -303,8 +301,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Early Harappan",
         "Mature Harappan",
-        "Late Harappan",
-        "Was found at Mohenjo-daro"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Siswal was an Early Harappan site."
@@ -313,9 +310,8 @@ window.chapter_indus_valley = {
       "q": "Damb Sadaat was a site belonging to which Harappan phase?",
       "opts": [
         "Early Harappan",
-        "Late Harappan",
         "Mature Harappan",
-        "Land and sea routes"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Damb Sadaat was an Early Harappan site."
@@ -336,8 +332,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Mature Harappan",
         "Early Harappan",
-        "Late Harappan",
-        "Followed a binary system"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Harappa was a Mature Harappan site."
@@ -346,9 +341,8 @@ window.chapter_indus_valley = {
       "q": "Mohenjo-daro was a site belonging to which Harappan phase?",
       "opts": [
         "Mature Harappan",
-        "Late Harappan",
         "Early Harappan",
-        "System of town planning"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Mohenjo-daro was a Mature Harappan site."
@@ -357,9 +351,8 @@ window.chapter_indus_valley = {
       "q": "Lothal was a site belonging to which Harappan phase?",
       "opts": [
         "Mature Harappan",
-        "Late Harappan",
         "Early Harappan",
-        "A line of writing"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Lothal was a Mature Harappan site."
@@ -368,9 +361,8 @@ window.chapter_indus_valley = {
       "q": "Dholavira was a site belonging to which Harappan phase?",
       "opts": [
         "Mature Harappan",
-        "Late Harappan",
         "Early Harappan",
-        "As having three faces"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Dholavira was a Mature Harappan site."
@@ -380,8 +372,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Mature Harappan",
         "Early Harappan",
-        "Late Harappan",
-        "Use of wheeled transport"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Kalibangan was a Mature Harappan site."
@@ -391,8 +382,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Mature Harappan",
         "Early Harappan",
-        "Late Harappan",
-        "Evidence of a granary"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Rakhigarhi was a Mature Harappan site."
@@ -402,8 +392,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Mature Harappan",
         "Early Harappan",
-        "Late Harappan",
-        "Brick ratio was 1:2:4"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Banawali was a Mature Harappan site."
@@ -412,9 +401,8 @@ window.chapter_indus_valley = {
       "q": "Ganweriwala was a site belonging to which Harappan phase?",
       "opts": [
         "Mature Harappan",
-        "Late Harappan",
         "Early Harappan",
-        "From the Harappan Civilisation"
+        "Late Harappan"
       ],
       "ans": 0,
       "exp": "Ganweriwala was a Mature Harappan site."
@@ -435,8 +423,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Late Harappan",
         "Early Harappan",
-        "Mature Harappan",
-        "Was found at Lothal"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Jhukar was a Late Harappan site."
@@ -446,8 +433,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Late Harappan",
         "Early Harappan",
-        "Mature Harappan",
-        "Over a red surface"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Amri continued as a Late Harappan site."
@@ -456,9 +442,8 @@ window.chapter_indus_valley = {
       "q": "Desalpur was a site belonging to which Harappan phase?",
       "opts": [
         "Late Harappan",
-        "Mature Harappan",
         "Early Harappan",
-        "Known to the Harappans"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Desalpur was a Late Harappan site."
@@ -467,9 +452,8 @@ window.chapter_indus_valley = {
       "q": "Ahar was a site belonging to which Harappan phase?",
       "opts": [
         "Late Harappan",
-        "Mature Harappan",
         "Early Harappan",
-        "As Pashupati or Proto-Shiva"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Ahar was a Late Harappan site."
@@ -479,8 +463,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Late Harappan",
         "Early Harappan",
-        "Mature Harappan",
-        "Approximately 10.5 cm tall"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Mitathal was a Late Harappan site."
@@ -490,8 +473,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Late Harappan",
         "Early Harappan",
-        "Mature Harappan",
-        "Of a Harappan city"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Rangpur was a Late Harappan site."
@@ -500,9 +482,8 @@ window.chapter_indus_valley = {
       "q": "Lothal continued into which Harappan phase?",
       "opts": [
         "Late Harappan",
-        "Mature Harappan",
         "Early Harappan",
-        "Was discovered at Lothal"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Lothal continued into the Late Harappan phase."
@@ -512,8 +493,7 @@ window.chapter_indus_valley = {
       "opts": [
         "Late Harappan",
         "Early Harappan",
-        "Mature Harappan",
-        "Than the lower town"
+        "Mature Harappan"
       ],
       "ans": 0,
       "exp": "Daimabad was a Late Harappan site."
@@ -1919,9 +1899,9 @@ window.chapter_indus_valley = {
       "q": "From where did the Harappans import copper?",
       "opts": [
         "Khetri",
-        "Found at Harappan sites",
-        "Both men and women",
-        "Archaeological Survey of India"
+        "Afghanistan",
+        "Central Asia",
+        "Karnataka"
       ],
       "ans": 0,
       "exp": "Harappans imported copper from Khetri."
@@ -1941,9 +1921,9 @@ window.chapter_indus_valley = {
       "q": "Where was Jade obtained from?",
       "opts": [
         "Central Asia",
-        "Worshipped a male deity",
-        "Was discovered at Lothal",
-        "Harappan merchants traded carnelian"
+        "Khetri",
+        "Afghanistan",
+        "Karnataka"
       ],
       "ans": 0,
       "exp": "Jade was obtained from Central Asia."
@@ -2711,9 +2691,9 @@ window.chapter_indus_valley = {
       "q": "The Dancing Girl is also known as which of the following?",
       "opts": [
         "The Tribhanga Mudra figure",
-        "Is situated in Haryana",
-        "Mainly a residential area",
-        "Domesticated by the Harappans"
+        "The Priest-King",
+        "The Pashupati Seal",
+        "The Mother Goddess figurine"
       ],
       "ans": 0,
       "exp": "The Dancing Girl is also known as the Tribhanga Mudra figure."
@@ -3019,9 +2999,9 @@ window.chapter_indus_valley = {
       "q": "What did Harappa yield, according to the notes?",
       "opts": [
         "12 granaries arranged in two rows of six",
-        "13 granaries arranged in two rows of six",
-        "14 granaries arranged in two rows of six",
-        "15 granaries arranged in two rows of six"
+        "Evidence of the terracotta wheel, found at Rakhigarhi",
+        "Evidence of pit burials, found at Ropar",
+        "Evidence of two different crops being grown together, found at Kalibangan"
       ],
       "ans": 0,
       "exp": "Harappa yielded 12 granaries arranged in two rows of six."
@@ -3030,9 +3010,9 @@ window.chapter_indus_valley = {
       "q": "What did Harappa yield, according to the notes?",
       "opts": [
         "A coffin burial",
-        "In the Cholistan region",
-        "Highly developed drainage system",
-        "The Indus Valley Civilisation"
+        "Evidence of a ploughed field, found at Kalibangan",
+        "Evidence of toys, found at Rakhigarhi",
+        "Evidence of a dog buried with its master, found at Ropar"
       ],
       "ans": 0,
       "exp": "Harappa yielded a coffin burial."
@@ -3041,9 +3021,9 @@ window.chapter_indus_valley = {
       "q": "What did Harappa yield, according to the notes?",
       "opts": [
         "The red sandstone male torso",
-        "A separate fortification wall",
-        "A Mature Harappan site",
-        "Beads included circular forms"
+        "Evidence of fire altars, found at Kalibangan",
+        "A giant water reservoir, found at Dholavira",
+        "Evidence of extended burials, found at Sanauli"
       ],
       "ans": 0,
       "exp": "Harappa yielded the red sandstone male torso."
@@ -3052,9 +3032,9 @@ window.chapter_indus_valley = {
       "q": "What did Harappa yield, according to the notes?",
       "opts": [
         "Evidence of a granary",
-        "To build flat roofs",
-        "Important centre of bead-making",
-        "Not yet been deciphered"
+        "Evidence of two different crops being grown together, found at Kalibangan",
+        "Barley, found at Banawali",
+        "Evidence of toys, found at Rakhigarhi"
       ],
       "ans": 0,
       "exp": "Harappa yielded evidence of a granary."
@@ -3283,9 +3263,9 @@ window.chapter_indus_valley = {
       "q": "What did Kalibangan yield, according to the notes?",
       "opts": [
         "Evidence of a ploughed field",
-        "Evidence of a granary",
-        "Was obtained from Afghanistan",
-        "Were found on jars"
+        "A genetic sample from a human skeleton, found at Rakhigarhi",
+        "Evidence of a lack of a grid-patterned town plan, found at Banawali",
+        "A coffin burial, found at Harappa"
       ],
       "ans": 0,
       "exp": "Kalibangan yielded evidence of a ploughed field."
@@ -3294,9 +3274,9 @@ window.chapter_indus_valley = {
       "q": "What did Kalibangan yield, according to the notes?",
       "opts": [
         "Evidence of fire altars",
-        "Discovered during the 1970s",
-        "Red sandstone male torso",
-        "Is situated in Punjab"
+        "Evidence of the terracotta wheel, found at Rakhigarhi",
+        "Terracotta models of a plough, found at Banawali",
+        "The red sandstone male torso, found at Harappa"
       ],
       "ans": 0,
       "exp": "Kalibangan yielded evidence of fire altars."
@@ -3305,9 +3285,9 @@ window.chapter_indus_valley = {
       "q": "What did Kalibangan yield, according to the notes?",
       "opts": [
         "Evidence of two different crops being grown together",
-        "From a human skeleton",
-        "Was discovered at Lothal",
-        "Found on ancient signboards"
+        "Evidence of toys, found at Rakhigarhi",
+        "Reported evidence of horse remains, found at Surkotada",
+        "Evidence of a granary, found at Harappa"
       ],
       "ans": 0,
       "exp": "Kalibangan yielded evidence of two different crops being grown together."
@@ -3338,9 +3318,9 @@ window.chapter_indus_valley = {
       "q": "What did Rakhigarhi yield, according to the notes?",
       "opts": [
         "A genetic sample from a human skeleton",
-        "The Indus Valley Civilisation",
-        "Evidence of extended burials",
-        "Port and trading centre"
+        "A giant water reservoir, found at Dholavira",
+        "Evidence of pit burials, found at Ropar",
+        "Evidence of a ploughed field, found at Kalibangan"
       ],
       "ans": 0,
       "exp": "Rakhigarhi yielded a genetic sample from a human skeleton."
@@ -3349,9 +3329,9 @@ window.chapter_indus_valley = {
       "q": "What did Rakhigarhi yield, according to the notes?",
       "opts": [
         "Evidence of the terracotta wheel",
-        "At most Harappan sites",
-        "Larger than the citadel",
-        "Important centre of shell-making"
+        "Barley, found at Banawali",
+        "Evidence of a dog buried with its master, found at Ropar",
+        "Evidence of fire altars, found at Kalibangan"
       ],
       "ans": 0,
       "exp": "Rakhigarhi yielded evidence of the terracotta wheel."
@@ -3360,9 +3340,9 @@ window.chapter_indus_valley = {
       "q": "What did Rakhigarhi yield, according to the notes?",
       "opts": [
         "Evidence of toys",
-        "BCE to 2600 BCE",
-        "Buried with copper mirrors",
-        "Of the Indian subcontinent"
+        "Evidence of a lack of a grid-patterned town plan, found at Banawali",
+        "Evidence of extended burials, found at Sanauli",
+        "Evidence of two different crops being grown together, found at Kalibangan"
       ],
       "ans": 0,
       "exp": "Rakhigarhi yielded evidence of toys."
@@ -3382,9 +3362,9 @@ window.chapter_indus_valley = {
       "q": "Dholavira is located between which two water channels?",
       "opts": [
         "Mansar and Manhar",
-        "From a human skeleton",
-        "Of the Ghaggar River",
-        "The Indus Valley Civilisation"
+        "Ravi and Chenab",
+        "Indus and Hakra",
+        "Ghaggar and Saraswati"
       ],
       "ans": 0,
       "exp": "Dholavira is located between the Mansar and Manhar water channels."
@@ -3393,9 +3373,9 @@ window.chapter_indus_valley = {
       "q": "What did Dholavira yield, according to the notes?",
       "opts": [
         "A giant water reservoir",
-        "Was associated with seal-making",
-        "A Mature Harappan site",
-        "Divided into three parts"
+        "Terracotta models of a plough, found at Banawali",
+        "12 granaries arranged in two rows of six, found at Harappa",
+        "A genetic sample from a human skeleton, found at Rakhigarhi"
       ],
       "ans": 0,
       "exp": "Dholavira yielded a giant water reservoir."
@@ -3470,9 +3450,9 @@ window.chapter_indus_valley = {
       "q": "What did Banawali yield, according to the notes?",
       "opts": [
         "Barley",
-        "As the Indus script",
-        "The citadel of Dholavira",
-        "BCE to 1700 BCE"
+        "Reported evidence of horse remains, found at Surkotada",
+        "A coffin burial, found at Harappa",
+        "Evidence of the terracotta wheel, found at Rakhigarhi"
       ],
       "ans": 0,
       "exp": "Banawali yielded barley."
@@ -3481,9 +3461,9 @@ window.chapter_indus_valley = {
       "q": "What did Banawali yield, according to the notes?",
       "opts": [
         "Evidence of a lack of a grid-patterned town plan",
-        "Found on copper tools",
-        "Two different crops together",
-        "Was constructed at Harappa"
+        "Evidence of pit burials, found at Ropar",
+        "The red sandstone male torso, found at Harappa",
+        "Evidence of toys, found at Rakhigarhi"
       ],
       "ans": 0,
       "exp": "Banawali yielded evidence of a lack of a grid-patterned town plan."
@@ -3492,9 +3472,9 @@ window.chapter_indus_valley = {
       "q": "What did Banawali yield, according to the notes?",
       "opts": [
         "Terracotta models of a plough",
-        "Were found on seals",
-        "Archaeological Survey of India",
-        "The Tribhanga Mudra figure"
+        "Evidence of a dog buried with its master, found at Ropar",
+        "Evidence of a granary, found at Harappa",
+        "A giant water reservoir, found at Dholavira"
       ],
       "ans": 0,
       "exp": "Banawali yielded terracotta models of a plough."
@@ -3569,9 +3549,9 @@ window.chapter_indus_valley = {
       "q": "What did Surkotada yield, according to the notes?",
       "opts": [
         "Reported evidence of horse remains",
-        "A separate fortification wall",
-        "Archaeological Survey of India",
-        "Both men and women"
+        "Evidence of extended burials, found at Sanauli",
+        "Evidence of a ploughed field, found at Kalibangan",
+        "Barley, found at Banawali"
       ],
       "ans": 0,
       "exp": "Surkotada yielded reported evidence of horse remains."
@@ -3602,9 +3582,9 @@ window.chapter_indus_valley = {
       "q": "What did Ropar yield, according to the notes?",
       "opts": [
         "Evidence of pit burials",
-        "Was discovered at Kalibangan",
-        "Cultivated by the Harappans",
-        "Is surrounded by animals"
+        "12 granaries arranged in two rows of six, found at Harappa",
+        "Evidence of fire altars, found at Kalibangan",
+        "Evidence of a lack of a grid-patterned town plan, found at Banawali"
       ],
       "ans": 0,
       "exp": "Ropar yielded evidence of pit burials."
@@ -3613,9 +3593,9 @@ window.chapter_indus_valley = {
       "q": "What did Ropar yield, according to the notes?",
       "opts": [
         "Evidence of a dog buried with its master",
-        "Situated in Uttar Pradesh",
-        "BCE to 1700 BCE",
-        "Of the Harappan Civilisation"
+        "A coffin burial, found at Harappa",
+        "Evidence of two different crops being grown together, found at Kalibangan",
+        "Terracotta models of a plough, found at Banawali"
       ],
       "ans": 0,
       "exp": "Ropar yielded evidence of a dog buried with its master."
@@ -3635,9 +3615,9 @@ window.chapter_indus_valley = {
       "q": "What did Sanauli yield, according to the notes?",
       "opts": [
         "Evidence of extended burials",
-        "Written in opposite directions",
-        "Was found at Lothal",
-        "Divided into two parts"
+        "The red sandstone male torso, found at Harappa",
+        "A genetic sample from a human skeleton, found at Rakhigarhi",
+        "Reported evidence of horse remains, found at Surkotada"
       ],
       "ans": 0,
       "exp": "Sanauli yielded evidence of extended burials."
