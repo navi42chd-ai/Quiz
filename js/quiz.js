@@ -500,9 +500,6 @@ function endQuiz() {
     <span class="bc-current">Results</span>
   `;
 
-  document.getElementById('res-pct').textContent =
-    percentage + '%';
-
   document.getElementById('res-grade').textContent =
     grade.label;
 
@@ -533,6 +530,55 @@ function endQuiz() {
       : `${seconds}s`;
 
   goTo('result');
+  playResultAnimations(percentage, grade.color);
+}
+
+// ── RESULT ANIMATIONS ────────────────────────────────────────
+
+/**
+ * Animates the score ring filling up (and the % counting up) to
+ * match the actual score, then replays the card's entrance animation.
+ */
+function animateScoreRing(targetPercentage, color) {
+  const ring = document.getElementById('res-ring');
+  const pctText = document.getElementById('res-pct');
+  const duration = 1100;
+  const startTime = performance.now();
+
+  ring.style.background =
+    `conic-gradient(${color} 0 0%, #f1f3f7 0%)`;
+  pctText.textContent = '0%';
+
+  function step(now) {
+    const t = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3); // ease-out-cubic
+    const current = targetPercentage * eased;
+
+    ring.style.background =
+      `conic-gradient(${color} 0 ${current}%, #f1f3f7 ${current}%)`;
+    pctText.textContent = Math.round(current) + '%';
+
+    if (t < 1) {
+      requestAnimationFrame(step);
+    } else {
+      ring.style.background =
+        `conic-gradient(${color} 0 ${targetPercentage}%, #f1f3f7 ${targetPercentage}%)`;
+      pctText.textContent = targetPercentage + '%';
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function playResultAnimations(percentage, gradeColor) {
+  const card = document.querySelector('.result-card');
+
+  // Restart the CSS entrance animations even on repeat quizzes
+  card.classList.remove('animate-in');
+  void card.offsetWidth; // force reflow so the animation can replay
+  card.classList.add('animate-in');
+
+  animateScoreRing(percentage, gradeColor);
 }
 
 function retryQuiz() {
