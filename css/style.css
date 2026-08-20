@@ -510,11 +510,17 @@ textarea {
   place-items: center;
   margin: auto;
   background: conic-gradient(
-    var(--accent) 0 78%,
-    #f1f3f7 78%
+    var(--accent) 0 0%,
+    #f1f3f7 0%
   );
   border: 9px solid #ffffff;
   box-shadow: 0 0 0 1px var(--line);
+  transform: scale(0.85);
+  opacity: 0;
+}
+
+.result-card.animate-in .result-ring {
+  animation: ringPopIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .result-pct {
@@ -526,6 +532,11 @@ textarea {
   font-size: 16px;
   font-weight: 800;
   margin-top: 18px;
+  opacity: 0;
+}
+
+.result-card.animate-in .result-grade {
+  animation: statFadeIn 0.45s ease 0.55s forwards;
 }
 
 .result-chapter-label {
@@ -544,6 +555,28 @@ textarea {
   padding: 14px 7px;
   background: #f8f9fb;
   border-radius: 14px;
+  opacity: 0;
+}
+
+.result-card.animate-in .stat-box {
+  animation: statFadeIn 0.4s ease forwards;
+}
+
+.result-card.animate-in .stat-box:nth-child(1) { animation-delay: 0.65s; }
+.result-card.animate-in .stat-box:nth-child(2) { animation-delay: 0.71s; }
+.result-card.animate-in .stat-box:nth-child(3) { animation-delay: 0.77s; }
+.result-card.animate-in .stat-box:nth-child(4) { animation-delay: 0.83s; }
+.result-card.animate-in .stat-box:nth-child(5) { animation-delay: 0.89s; }
+.result-card.animate-in .stat-box:nth-child(6) { animation-delay: 0.95s; }
+
+@keyframes ringPopIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes statFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .stat-num {
