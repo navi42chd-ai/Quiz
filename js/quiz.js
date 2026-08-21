@@ -8,7 +8,8 @@ let state = {
   current: 0,
   answered: [],   // chosen answer index after options are shuffled
   startTime: null,
-  isReattempt: false
+  isReattempt: false,
+  streak: 0       // consecutive correct answers, resets on a wrong answer
 };
 
 const WRONG_QUESTIONS_KEY = 'ssc-quiz-wrong-questions-v1';
@@ -88,6 +89,7 @@ function startReattempt() {
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = true;
+  state.streak = 0;
 
   // This attempt starts with a clean bank. Any new mistake is saved again.
   clearWrongQuestions();
@@ -250,6 +252,7 @@ function selectChapter(chapter) {
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = false;
+  state.streak = 0;
 
   renderQuestion();
   goTo('quiz');
@@ -261,6 +264,18 @@ function renderQuestion() {
   const question = state.questions[state.current];
   const total = state.questions.length;
   const index = state.current;
+
+  // Keep the streak badge in sync when navigating between questions
+  // (without replaying its pop-in animation).
+  const streakBadge = document.getElementById('streak-badge');
+  if (streakBadge) {
+    if (state.streak >= 2) {
+      streakBadge.textContent = `🔥 ${state.streak} in a row`;
+      streakBadge.style.display = 'inline-flex';
+    } else {
+      streakBadge.style.display = 'none';
+    }
+  }
 
   // Breadcrumb
   document.getElementById('quiz-breadcrumb').innerHTML = `
@@ -320,14 +335,19 @@ function renderQuestion() {
 
 function answer(chosenIndex) {
   const question = state.questions[state.current];
+  const isCorrect = chosenIndex === question.ans;
 
   state.answered[state.current] = chosenIndex;
 
-  if (chosenIndex !== question.ans) {
+  if (isCorrect) {
+    state.streak = (state.streak || 0) + 1;
+  } else {
     saveWrongQuestion(question);
+    state.streak = 0;
   }
 
-  showAnswer(chosenIndex, question.ans);
+  showAnswer(chosenIndex, question.ans, { fresh: true });
+  updateStreakBadge();
 
   updateNavButtons();
 
@@ -337,19 +357,134 @@ function answer(chosenIndex) {
     `${attempted} attempted`;
 }
 
-function showAnswer(chosen, correct) {
+function showAnswer(chosen, correct, { fresh = false } = {}) {
   const optionButtons = document.querySelectorAll('.option-btn');
 
   optionButtons.forEach(button => {
     button.disabled = true;
-    button.classList.remove('correct', 'wrong', 'reveal');
+    button.classList.remove('correct', 'wrong', 'reveal', 'shake');
   });
 
   const isCorrect = chosen === correct;
-  optionButtons[chosen].classList.add(isCorrect ? 'correct' : 'wrong');
+  const chosenButton = optionButtons[chosen];
+  chosenButton.classList.add(isCorrect ? 'correct' : 'wrong');
 
   if (!isCorrect) {
     optionButtons[correct].classList.add('reveal');
+  }
+
+  // Only celebrate/penalise on a fresh tap — not when the person is just
+  // navigating back to review a question they already answered.
+  if (fresh) {
+    if (isCorrect) {
+      playCorrectSound();
+      spawnConfetti(chosenButton);
+      if (state.streak > 0 && state.streak % 3 === 0) {
+        playStreakSound();
+      }
+      if (navigator.vibrate) navigator.vibrate(15);
+    } else {
+      chosenButton.classList.add('shake');
+      playWrongSound();
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+    }
+  }
+}
+
+// ── ANSWER FEEDBACK: SOUND, CONFETTI, STREAK ─────────────────
+
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    audioCtx = new AudioContextClass();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playTone(freq, startOffset, duration, type, peakGain) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const startTime = ctx.currentTime + startOffset;
+
+  osc.type = type;
+  osc.frequency.value = freq;
+
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(peakGain, startTime + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.03);
+}
+
+function playCorrectSound() {
+  // Bright ascending two-note chime
+  playTone(880, 0, 0.12, 'sine', 0.18);
+  playTone(1318.5, 0.08, 0.18, 'sine', 0.16);
+}
+
+function playWrongSound() {
+  // Short, low, unobtrusive buzz
+  playTone(180, 0, 0.15, 'sawtooth', 0.1);
+  playTone(140, 0.05, 0.18, 'sawtooth', 0.08);
+}
+
+function playStreakSound() {
+  // Triumphant ascending arpeggio for streak milestones
+  const notes = [523.25, 659.25, 783.99, 1046.5];
+  notes.forEach((freq, i) => playTone(freq, i * 0.075, 0.16, 'triangle', 0.14));
+}
+
+function spawnConfetti(originElement) {
+  const rect = originElement.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  const glyphs = ['✨', '⭐', '🎉', '💫'];
+
+  for (let i = 0; i < 7; i++) {
+    const particle = document.createElement('span');
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 36 + Math.random() * 55;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance - 30; // bias upward
+
+    particle.className = 'confetti-particle';
+    particle.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    particle.style.left = centerX + 'px';
+    particle.style.top = centerY + 'px';
+    particle.style.setProperty('--dx', dx + 'px');
+    particle.style.setProperty('--dy', dy + 'px');
+
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 900);
+  }
+}
+
+function updateStreakBadge() {
+  const badge = document.getElementById('streak-badge');
+  if (!badge) return;
+
+  const streak = state.streak || 0;
+
+  if (streak >= 2) {
+    badge.textContent = `🔥 ${streak} in a row`;
+    badge.style.display = 'inline-flex';
+    badge.classList.remove('pop');
+    void badge.offsetWidth; // restart the animation on every increment
+    badge.classList.add('pop');
+  } else {
+    badge.classList.remove('pop');
+    badge.style.display = 'none';
   }
 }
 
@@ -587,6 +722,7 @@ function retryQuiz() {
     state.current = 0;
     state.answered = new Array(state.questions.length).fill(null);
     state.startTime = Date.now();
+    state.streak = 0;
     clearWrongQuestions();
     renderQuestion();
     goTo('quiz');
