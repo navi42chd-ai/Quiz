@@ -326,6 +326,9 @@ textarea {
 .btn-goto {
   margin-left: auto;
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   border: 1px solid var(--line);
   background: #ffffff;
   border-radius: 9px;
@@ -334,6 +337,26 @@ textarea {
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-revise {
+  margin-left: auto;
+}
+
+.btn-goto + .btn-goto {
+  margin-left: 0;
+}
+
+@media (max-width: 420px) {
+  .btn-goto .btn-label {
+    display: none;
+  }
+
+  .btn-goto {
+    padding: 7px 9px;
+    gap: 0;
+  }
 }
 
 .quiz-meta-row {
@@ -901,12 +924,37 @@ textarea {
 
 .modal-input {
   width: 100%;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 12px;
   font-size: 16px;
   font-weight: 700;
   outline: none;
+}
+
+.revise-field-row {
+  display: flex;
+  gap: 10px;
+}
+
+.revise-field {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.revise-field label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.revise-field-loops {
+  margin-top: 12px;
 }
 
 .modal-error {
