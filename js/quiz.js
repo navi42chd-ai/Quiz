@@ -5,10 +5,15 @@ let state = {
   subject: null,
   chapter: null,
   questions: [],
+  chapterQuestions: [],  // the full, unfiltered question set for the current
+                          // chapter/session — used as the reference range for
+                          // the "revise a range" feature, independent of any
+                          // slicing/looping currently applied to `questions`
   current: 0,
   answered: [],   // chosen answer index after options are shuffled
   startTime: null,
-  isReattempt: false
+  isReattempt: false,
+  reviseInfo: null // { from, to, loops, rangeSize } when in a custom revise session
 };
 
 const WRONG_QUESTIONS_KEY = 'ssc-quiz-wrong-questions-v1';
@@ -84,10 +89,12 @@ function startReattempt() {
   state.subject = SUBJECTS.find(item => item.id === firstSaved.subjectId) || SUBJECTS[0];
   state.chapter = { id: 'reattempt', label: 'Wrong Questions' };
   state.questions = prepareQuestions(questions);
+  state.chapterQuestions = state.questions;
   state.current = 0;
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = true;
+  state.reviseInfo = null;
 
   // This attempt starts with a clean bank. Any new mistake is saved again.
   clearWrongQuestions();
@@ -245,11 +252,13 @@ function selectChapter(chapter) {
     sourceChapterId: chapter.id,
     sourceQuestionIndex: questionIndex
   })));
+  state.chapterQuestions = state.questions;
 
   state.current = 0;
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = false;
+  state.reviseInfo = null;
 
   renderQuestion();
   goTo('quiz');
@@ -262,6 +271,11 @@ function renderQuestion() {
   const total = state.questions.length;
   const index = state.current;
 
+  const chapterLabelText = state.reviseInfo
+    ? `${state.chapter.label} · Revise ${state.reviseInfo.from}-${state.reviseInfo.to}` +
+      (state.reviseInfo.loops > 1 ? ` ×${state.reviseInfo.loops}` : '')
+    : state.chapter.label;
+
   // Breadcrumb
   document.getElementById('quiz-breadcrumb').innerHTML = `
     <span class="bc-link" onclick="goSubjects()">Subjects</span>
@@ -270,7 +284,7 @@ function renderQuestion() {
       ${state.subject.label}
     </span>
     <span class="bc-sep">/</span>
-    <span class="bc-current">${state.chapter.label}</span>
+    <span class="bc-current">${escapeHtml(chapterLabelText)}</span>
   `;
 
   // Progress
@@ -505,6 +519,90 @@ function submitGoto() {
 
   closeGotoModal();
   renderQuestion();
+}
+
+// ── REVISE A RANGE (custom looped revision session) ──────────
+
+function openReviseModal() {
+  const total = (state.chapterQuestions.length || state.questions.length);
+
+  document.getElementById('revise-range-hint').textContent =
+    `This chapter has ${total} question${total === 1 ? '' : 's'}`;
+
+  const fromInput = document.getElementById('revise-from');
+  const toInput = document.getElementById('revise-to');
+  const loopsInput = document.getElementById('revise-loops');
+
+  fromInput.min = 1;
+  fromInput.max = total;
+  fromInput.value = 1;
+
+  toInput.min = 1;
+  toInput.max = total;
+  toInput.value = total;
+
+  loopsInput.min = 1;
+  loopsInput.value = 1;
+
+  document.getElementById('revise-error').textContent = '';
+  document.getElementById('revise-modal').classList.add('open');
+}
+
+function closeReviseModal() {
+  document.getElementById('revise-modal').classList.remove('open');
+}
+
+function submitRevise() {
+  const base = state.chapterQuestions.length ? state.chapterQuestions : state.questions;
+  const total = base.length;
+  const errorEl = document.getElementById('revise-error');
+
+  const from = parseInt(document.getElementById('revise-from').value, 10);
+  const to = parseInt(document.getElementById('revise-to').value, 10);
+  const loops = parseInt(document.getElementById('revise-loops').value, 10);
+
+  if (
+    !Number.isInteger(from) || !Number.isInteger(to) ||
+    from < 1 || to < 1 || from > total || to > total
+  ) {
+    errorEl.textContent = `Enter question numbers between 1 and ${total}.`;
+    return;
+  }
+
+  if (from > to) {
+    errorEl.textContent = '"From" must be less than or equal to "To".';
+    return;
+  }
+
+  if (!Number.isInteger(loops) || loops < 1) {
+    errorEl.textContent = 'Loops must be a whole number of 1 or more.';
+    return;
+  }
+
+  if (loops > 20) {
+    errorEl.textContent = 'Please choose 20 loops or fewer.';
+    return;
+  }
+
+  const rangeSlice = base.slice(from - 1, to);
+  let combined = [];
+
+  // Reshuffle option order fresh on every lap, so revising the same
+  // questions repeatedly doesn't let you just memorise option positions.
+  for (let lap = 0; lap < loops; lap++) {
+    combined = combined.concat(prepareQuestions(rangeSlice));
+  }
+
+  state.questions = combined;
+  state.current = 0;
+  state.answered = new Array(combined.length).fill(null);
+  state.startTime = Date.now();
+  state.isReattempt = false;
+  state.reviseInfo = { from, to, loops, rangeSize: rangeSlice.length };
+
+  closeReviseModal();
+  renderQuestion();
+  goTo('quiz');
 }
 
 // ── RELATED IMAGE LOOKUP (Wikipedia — free, no API key needed) ──
@@ -799,9 +897,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const reviseModal = document.getElementById('revise-modal');
+
+  reviseModal.addEventListener('click', event => {
+    if (event.target === reviseModal) {
+      closeReviseModal();
+    }
+  });
+
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && imageModal.classList.contains('open')) {
+    if (event.key !== 'Escape') return;
+
+    if (imageModal.classList.contains('open')) {
       closeImageModal();
+    }
+
+    if (reviseModal.classList.contains('open')) {
+      closeReviseModal();
     }
   });
 
