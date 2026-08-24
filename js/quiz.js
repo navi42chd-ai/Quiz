@@ -553,6 +553,268 @@ function submitGoto() {
   renderQuestion();
 }
 
+// ── RELATED IMAGE LOOKUP (Wikipedia — free, no API key needed) ──
+
+// Common words that get capitalised only because of sentence position
+// (question starters, connectors, numbers-as-words) — never useful as a
+// search term on their own, even when they show up as a single-word match.
+const IMAGE_SEARCH_STOPWORDS = new Set([
+  'who', 'whom', 'whose', 'what', 'when', 'where', 'which', 'why', 'how',
+  'during', 'after', 'before', 'into', 'onto', 'from', 'to', 'in', 'by',
+  'with', 'the', 'this', 'that', 'these', 'those', 'was', 'were', 'is',
+  'are', 'did', 'does', 'do', 'and', 'or', 'but', 'of', 'at', 'on', 'as',
+  'not', 'no', 'a', 'an', 'his', 'her', 'its', 'their', 'he', 'she', 'it',
+  'they', 'you', 'your', 'our', 'we', 'i', 'both', 'all', 'each', 'other',
+  'another', 'same', 'following', 'also', 'only', 'such', 'more', 'most',
+  'many', 'several', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+  'eight', 'nine', 'ten'
+]);
+
+function stripLeadingStopwords(phrase) {
+  let words = phrase.split(/\s+/);
+  while (words.length > 1 && IMAGE_SEARCH_STOPWORDS.has(words[0].toLowerCase())) {
+    words = words.slice(1);
+  }
+  return words.join(' ');
+}
+
+function isUsableNamedEntity(phrase) {
+  if (!phrase) return false;
+  const words = phrase.split(/\s+/);
+  if (words.length === 1 && IMAGE_SEARCH_STOPWORDS.has(words[0].toLowerCase())) {
+    return false;
+  }
+  return phrase.replace(/[^a-zA-Z]/g, '').length >= 3;
+}
+
+/**
+ * Pulls likely named entities (people, places, dynasties) out of a chunk
+ * of text, most specific first:
+ *   1. "Name Number" pairs like "Pulakeshin 2" or "Vikramaditya 1" —
+ *      very precise and match regnal-numeral Wikipedia titles well.
+ *   2. Multi-word capitalised phrases (e.g. "Ancient History"), allowing
+ *      a few lowercase connector words inside them.
+ *   3. Individual capitalised words — the broadest net, so a single
+ *      named person (e.g. "Grahavarman", "Shashanka") is never missed
+ *      just because they're mentioned alone rather than as part of a
+ *      longer phrase.
+ * Question-starter words ("Who", "Which", "During"...) are filtered out
+ * throughout so they never get treated as search terms.
+ */
+function extractNamedEntities(text) {
+  if (!text) return [];
+
+  const nameWithNumber = text.match(/\b[A-Z][a-zA-Z'-]*\s+\d+\b/g) || [];
+  const multiWordPhrases = text.match(/\b[A-Z][a-zA-Z''-]*(?:\s+(?:[A-Z][a-zA-Z''-]*|of|and|the))*\b/g) || [];
+  const singleWords = text.match(/\b[A-Z][a-zA-Z'-]{2,}\b/g) || [];
+
+  const seen = new Set();
+  const results = [];
+
+  [...nameWithNumber, ...multiWordPhrases, ...singleWords].forEach(raw => {
+    const cleaned = stripLeadingStopwords(
+      raw.replace(/[''`]s\b/gi, '').trim()
+    );
+    const key = cleaned.toLowerCase();
+
+    if (isUsableNamedEntity(cleaned) && !seen.has(key)) {
+      seen.add(key);
+      results.push(cleaned);
+    }
+  });
+
+  return results;
+}
+
+/**
+ * Builds an ordered list of search queries to try for the current
+ * question, from most to least specific:
+ *   1. The correct answer text as a whole, when it's short enough to be
+ *      usable directly (usually a proper noun on its own).
+ *   2. Named entities mined out of the answer text — the answer is often
+ *      more specific to what's actually being asked than the question
+ *      itself (e.g. "Who defeated X?" → the answer names the person).
+ *   3. Named entities mined out of the question text.
+ *   4. The current chapter's title.
+ *   5. The current subject's title — a last resort that should almost
+ *      always turn up something on Wikipedia.
+ * Each is tried in turn until one actually returns an image.
+ */
+function buildImageQueryCandidates(question) {
+  const candidates = [];
+  const addCandidate = value => {
+    const trimmed = (value || '').trim();
+    const key = trimmed.toLowerCase();
+    if (trimmed && !candidates.some(c => c.toLowerCase() === key)) {
+      candidates.push(trimmed);
+    }
+  };
+
+  const rawAnswer = (question.opts[question.ans] || '')
+    .replace(/\(.*?\)/g, '')
+    .trim();
+  const looksSearchableAnswer =
+    /[a-zA-Z]{3,}/.test(rawAnswer) &&
+    !/^\d/.test(rawAnswer) &&
+    rawAnswer.split(' ').length <= 6;
+
+  if (looksSearchableAnswer) {
+    addCandidate(rawAnswer);
+  }
+
+  extractNamedEntities(rawAnswer).forEach(addCandidate);
+  extractNamedEntities(question.q).forEach(addCandidate);
+
+  if (state.chapter) {
+    addCandidate(state.chapter.label);
+  }
+
+  if (state.subject) {
+    addCandidate(state.subject.label);
+  }
+
+  return candidates;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+async function fetchWikipediaThumbnail(query) {
+  const apiUrl =
+    'https://en.wikipedia.org/w/api.php' +
+    '?action=query&generator=search' +
+    `&gsrsearch=${encodeURIComponent(query)}` +
+    '&gsrlimit=1&prop=pageimages|info&inprop=url' +
+    '&piprop=thumbnail&pithumbsize=640&format=json&origin=*';
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const pages = data.query && data.query.pages;
+  const page = pages ? Object.values(pages)[0] : null;
+
+  return page && page.thumbnail && page.thumbnail.source ? page : null;
+}
+
+async function openQuestionImage() {
+  const modal = document.getElementById('image-modal');
+  const body = document.getElementById('image-modal-body');
+  const titleEl = document.getElementById('image-modal-title');
+  const question = state.questions[state.current];
+  const candidates = buildImageQueryCandidates(question);
+
+  titleEl.textContent = 'Related images';
+  body.innerHTML = `
+    <div class="image-loading">
+      <div class="image-spinner"></div>
+      <p>Looking for images…</p>
+    </div>
+  `;
+  modal.classList.add('open');
+
+  try {
+    const results = [];
+    const seenTitles = new Set();
+    const maxResults = 4;
+    const maxAttempts = 10; // safety cap on total network calls
+
+    for (let i = 0; i < candidates.length && i < maxAttempts && results.length < maxResults; i++) {
+      const page = await fetchWikipediaThumbnail(candidates[i]);
+
+      if (page) {
+        const key = page.title.toLowerCase();
+        if (!seenTitles.has(key)) {
+          seenTitles.add(key);
+          results.push(page);
+        }
+      }
+    }
+
+    renderImageResults(results);
+  } catch (error) {
+    body.innerHTML = `
+      <div class="image-empty">
+        Couldn't load images right now.
+        <br />Check your connection and try again.
+      </div>
+    `;
+  }
+}
+
+function wikipediaPageUrl(page) {
+  return page.fullurl || `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title)}`;
+}
+
+function renderImageResults(results) {
+  const body = document.getElementById('image-modal-body');
+  const titleEl = document.getElementById('image-modal-title');
+
+  if (results.length === 0) {
+    titleEl.textContent = 'Related images';
+    body.innerHTML = `
+      <div class="image-empty">
+        🕵️ Couldn't find any images for this question.
+        <br />Try a different one!
+      </div>
+    `;
+    return;
+  }
+
+  if (results.length === 1) {
+    const page = results[0];
+    titleEl.textContent = page.title;
+    body.innerHTML = `
+      <img
+        src="${page.thumbnail.source}"
+        alt="${escapeHtml(page.title)}"
+        class="image-modal-img"
+      />
+      <p class="image-modal-caption">${escapeHtml(page.title)}</p>
+      <a
+        href="${wikipediaPageUrl(page)}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="image-modal-source"
+      >View on Wikipedia →</a>
+      <p class="image-modal-attribution">Image via Wikipedia</p>
+    `;
+    return;
+  }
+
+  titleEl.textContent = `${results.length} related images`;
+
+  const itemsHtml = results
+    .map(
+      page => `
+        <a
+          class="image-grid-item"
+          href="${wikipediaPageUrl(page)}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="${page.thumbnail.source}"
+            alt="${escapeHtml(page.title)}"
+            class="image-grid-img"
+          />
+          <span class="image-grid-caption">${escapeHtml(page.title)}</span>
+        </a>
+      `
+    )
+    .join('');
+
+  body.innerHTML = `
+    <div class="image-grid">${itemsHtml}</div>
+    <p class="image-modal-attribution">Images via Wikipedia</p>
+  `;
+}
+
+function closeImageModal() {
+  document.getElementById('image-modal').classList.remove('open');
+}
+
 // ── INITIALISATION ───────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -572,6 +834,20 @@ document.addEventListener('DOMContentLoaded', () => {
   gotoModal.addEventListener('click', event => {
     if (event.target === gotoModal) {
       closeGotoModal();
+    }
+  });
+
+  const imageModal = document.getElementById('image-modal');
+
+  imageModal.addEventListener('click', event => {
+    if (event.target === imageModal) {
+      closeImageModal();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && imageModal.classList.contains('open')) {
+      closeImageModal();
     }
   });
 
