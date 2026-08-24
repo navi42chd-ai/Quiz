@@ -8,8 +8,7 @@ let state = {
   current: 0,
   answered: [],   // chosen answer index after options are shuffled
   startTime: null,
-  isReattempt: false,
-  streak: 0       // consecutive correct answers, resets on a wrong answer
+  isReattempt: false
 };
 
 const WRONG_QUESTIONS_KEY = 'ssc-quiz-wrong-questions-v1';
@@ -89,7 +88,6 @@ function startReattempt() {
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = true;
-  state.streak = 0;
 
   // This attempt starts with a clean bank. Any new mistake is saved again.
   clearWrongQuestions();
@@ -252,7 +250,6 @@ function selectChapter(chapter) {
   state.answered = new Array(state.questions.length).fill(null);
   state.startTime = Date.now();
   state.isReattempt = false;
-  state.streak = 0;
 
   renderQuestion();
   goTo('quiz');
@@ -264,18 +261,6 @@ function renderQuestion() {
   const question = state.questions[state.current];
   const total = state.questions.length;
   const index = state.current;
-
-  // Keep the streak badge in sync when navigating between questions
-  // (without replaying its pop-in animation).
-  const streakBadge = document.getElementById('streak-badge');
-  if (streakBadge) {
-    if (state.streak >= 2) {
-      streakBadge.textContent = `🔥 ${state.streak} in a row`;
-      streakBadge.style.display = 'inline-flex';
-    } else {
-      streakBadge.style.display = 'none';
-    }
-  }
 
   // Breadcrumb
   document.getElementById('quiz-breadcrumb').innerHTML = `
@@ -339,15 +324,11 @@ function answer(chosenIndex) {
 
   state.answered[state.current] = chosenIndex;
 
-  if (isCorrect) {
-    state.streak = (state.streak || 0) + 1;
-  } else {
+  if (!isCorrect) {
     saveWrongQuestion(question);
-    state.streak = 0;
   }
 
   showAnswer(chosenIndex, question.ans, { fresh: true });
-  updateStreakBadge();
 
   updateNavButtons();
 
@@ -379,9 +360,6 @@ function showAnswer(chosen, correct, { fresh = false } = {}) {
     if (isCorrect) {
       playCorrectSound();
       spawnConfetti(chosenButton);
-      if (state.streak > 0 && state.streak % 3 === 0) {
-        playStreakSound();
-      }
       if (navigator.vibrate) navigator.vibrate(15);
     } else {
       chosenButton.classList.add('shake');
@@ -391,7 +369,7 @@ function showAnswer(chosen, correct, { fresh = false } = {}) {
   }
 }
 
-// ── ANSWER FEEDBACK: SOUND, CONFETTI, STREAK ─────────────────
+// ── ANSWER FEEDBACK: SOUND, CONFETTI ──────────────────────────
 
 let audioCtx = null;
 
@@ -439,12 +417,6 @@ function playWrongSound() {
   playTone(140, 0.05, 0.18, 'sawtooth', 0.08);
 }
 
-function playStreakSound() {
-  // Triumphant ascending arpeggio for streak milestones
-  const notes = [523.25, 659.25, 783.99, 1046.5];
-  notes.forEach((freq, i) => playTone(freq, i * 0.075, 0.16, 'triangle', 0.14));
-}
-
 function spawnConfetti(originElement) {
   const rect = originElement.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
@@ -467,24 +439,6 @@ function spawnConfetti(originElement) {
 
     document.body.appendChild(particle);
     setTimeout(() => particle.remove(), 900);
-  }
-}
-
-function updateStreakBadge() {
-  const badge = document.getElementById('streak-badge');
-  if (!badge) return;
-
-  const streak = state.streak || 0;
-
-  if (streak >= 2) {
-    badge.textContent = `🔥 ${streak} in a row`;
-    badge.style.display = 'inline-flex';
-    badge.classList.remove('pop');
-    void badge.offsetWidth; // restart the animation on every increment
-    badge.classList.add('pop');
-  } else {
-    badge.classList.remove('pop');
-    badge.style.display = 'none';
   }
 }
 
@@ -998,7 +952,6 @@ function retryQuiz() {
     state.current = 0;
     state.answered = new Array(state.questions.length).fill(null);
     state.startTime = Date.now();
-    state.streak = 0;
     clearWrongQuestions();
     renderQuestion();
     goTo('quiz');
