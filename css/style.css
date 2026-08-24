@@ -383,14 +383,17 @@ textarea {
 
 .options-list {
   display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, auto));
+  align-content: center;
   gap: clamp(6px, 1.2vh, 11px);
   min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .option-btn {
   width: 100%;
-  min-height: 0;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.5vw, 14px);
@@ -413,7 +416,7 @@ textarea {
 .opt-text {
   font-size: 16px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -823,11 +826,13 @@ textarea {
 
   .options-list {
     gap: 5px;
+    overflow-y: auto;
   }
 
   .option-btn {
     padding: 5px 9px;
     border-radius: 9px;
+    min-height: 36px;
   }
 
   .opt-label {
