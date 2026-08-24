@@ -419,6 +419,9 @@ textarea {
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-width: 0;
+  flex: 1 1 auto;
+  word-break: break-word;
 }
 
 .option-btn:hover:not(:disabled) {
