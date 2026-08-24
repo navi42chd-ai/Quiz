@@ -62,7 +62,10 @@
     <main class="quiz-body">
       <div class="question-shell">
         <div class="streak-badge" id="streak-badge" style="display:none"></div>
-        <div class="q-kicker" id="q-kicker">MCQ</div>
+        <div class="q-kicker-row">
+          <div class="q-kicker" id="q-kicker">MCQ</div>
+          <button class="btn-image" onclick="openQuestionImage()" title="Show a related image">🖼️ Image</button>
+        </div>
         <p class="q-text" id="q-text"></p>
         <div class="options-list" id="options"></div>
       </div>
@@ -81,6 +84,17 @@
 </div>
 
 <div id="goto-modal" class="modal-backdrop"><div class="modal-box"><div class="modal-icon">#</div><div class="modal-title">Jump to a question</div><div class="modal-sub" id="goto-range">Enter a question number</div><input id="goto-input" class="modal-input" type="number" min="1" placeholder="e.g. 142" /><div class="modal-error" id="goto-error"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeGotoModal()">Cancel</button><button class="btn" onclick="submitGoto()">Go →</button></div></div></div>
+
+<div id="image-modal" class="modal-backdrop">
+  <div class="modal-box image-modal-box">
+    <div class="image-modal-header">
+      <div class="modal-title" id="image-modal-title">Related image</div>
+      <button class="image-modal-close" onclick="closeImageModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="image-modal-body" id="image-modal-body"></div>
+  </div>
+</div>
+
 <script src="js/quiz.js"></script>
 </body>
 </html>
