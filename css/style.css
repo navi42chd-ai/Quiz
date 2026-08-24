@@ -245,6 +245,7 @@ textarea {
   inset: 0;
   z-index: 20;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
   background: linear-gradient(180deg, #f8f9fd, #eef1f7);
   height: 100vh;
@@ -253,6 +254,7 @@ textarea {
 }
 
 .quiz-top {
+  min-width: 0;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(14px);
   padding: 10px max(12px, calc((100vw - 900px) / 2));
@@ -264,17 +266,27 @@ textarea {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .quiz-title-row .breadcrumb {
   min-width: 0;
+  flex: 1 1 auto;
+  flex-wrap: nowrap;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .quiz-title-row .breadcrumb span {
   white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.quiz-title-row .breadcrumb .bc-current {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn-goto {
