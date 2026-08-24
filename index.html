@@ -54,7 +54,8 @@
     <div class="quiz-top">
       <div class="quiz-title-row">
         <nav class="breadcrumb" id="quiz-breadcrumb"></nav>
-        <button class="btn-goto" onclick="openGotoModal()">Question map</button>
+        <button class="btn-goto btn-revise" onclick="openReviseModal()" title="Revise a range of questions"><span class="btn-icon">🔁</span><span class="btn-label">Revise</span></button>
+        <button class="btn-goto" onclick="openGotoModal()" title="Jump to a question"><span class="btn-icon">🗺️</span><span class="btn-label">Question map</span></button>
       </div>
       <div class="quiz-meta-row"><span class="prog-text" id="prog-text">Q 1 / 242</span><span class="prog-attempted" id="prog-attempted">0 attempted</span></div>
       <div class="prog-track"><div class="prog-fill" id="prog-bar"></div></div>
@@ -83,6 +84,36 @@
 </div>
 
 <div id="goto-modal" class="modal-backdrop"><div class="modal-box"><div class="modal-icon">#</div><div class="modal-title">Jump to a question</div><div class="modal-sub" id="goto-range">Enter a question number</div><input id="goto-input" class="modal-input" type="number" min="1" placeholder="e.g. 142" /><div class="modal-error" id="goto-error"></div><div class="modal-actions"><button class="btn btn-outline" onclick="closeGotoModal()">Cancel</button><button class="btn" onclick="submitGoto()">Go →</button></div></div></div>
+
+<div id="revise-modal" class="modal-backdrop">
+  <div class="modal-box">
+    <div class="modal-icon">🔁</div>
+    <div class="modal-title">Revise a range of questions</div>
+    <div class="modal-sub" id="revise-range-hint">Choose a question range</div>
+
+    <div class="revise-field-row">
+      <div class="revise-field">
+        <label for="revise-from">From</label>
+        <input id="revise-from" class="modal-input" type="number" min="1" />
+      </div>
+      <div class="revise-field">
+        <label for="revise-to">To</label>
+        <input id="revise-to" class="modal-input" type="number" min="1" />
+      </div>
+    </div>
+
+    <div class="revise-field revise-field-loops">
+      <label for="revise-loops">Loops (repeat this range)</label>
+      <input id="revise-loops" class="modal-input" type="number" min="1" value="1" />
+    </div>
+
+    <div class="modal-error" id="revise-error"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeReviseModal()">Cancel</button>
+      <button class="btn" onclick="submitRevise()">Start →</button>
+    </div>
+  </div>
+</div>
 
 <div id="image-modal" class="modal-backdrop">
   <div class="modal-box image-modal-box">
