@@ -391,32 +391,6 @@ textarea {
   overflow: hidden;
 }
 
-.streak-badge {
-  position: absolute;
-  top: 14px;
-  right: 16px;
-  z-index: 5;
-  align-items: center;
-  gap: 4px;
-  background: linear-gradient(135deg, #fb923c, #ef4444);
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 16px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
-}
-
-.streak-badge.pop {
-  animation: streakPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes streakPop {
-  0% { transform: scale(0.6) translateY(-4px); opacity: 0; }
-  60% { transform: scale(1.12) translateY(0); opacity: 1; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
-}
-
 .q-text {
   font-size: 16px;
   font-weight: 800;
