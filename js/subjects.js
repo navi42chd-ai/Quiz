@@ -66,6 +66,12 @@ const SUBJECTS = [
         label: 'Sangam Age',
         subtitle: '63 one-liner based MCQs',
         dataVar: 'chapter_sangam_age'
+      },
+      {
+        id: 'tripartite-struggle',
+        label: 'Tripartite Struggle',
+        subtitle: '255 one-liner based MCQs',
+        dataVar: 'chapter_tripartite_struggle'
       }
     ]
   }
