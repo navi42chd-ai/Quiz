@@ -13,10 +13,41 @@ let state = {
   answered: [],   // chosen answer index after options are shuffled
   startTime: null,
   isReattempt: false,
-  reviseInfo: null // { from, to, loops, rangeSize } when in a custom revise session
+  reviseInfo: null, // { from, to, loops, rangeSize } when in a custom revise session
+  bgImageCache: new Map(), // question index -> resolved background image URL (or null)
+  bgPrefetchInFlight: new Set() // question indices currently being prefetched
 };
 
 const WRONG_QUESTIONS_KEY = 'ssc-quiz-wrong-questions-v1';
+const THEME_KEY = 'quizhub-theme';
+
+// ── THEME (light / dark) ─────────────────────────────────────
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+
+  document.querySelectorAll('.theme-toggle').forEach(btn => {
+    btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  });
+
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeColorMeta) {
+    themeColorMeta.setAttribute('content', theme === 'dark' ? '#0b0f1a' : '#4f46e5');
+  }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+
+  applyTheme(next);
+
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch (error) {
+    // localStorage unavailable (private browsing, etc.) — theme just won't persist
+  }
+}
 
 function getWrongQuestions() {
   try {
@@ -95,6 +126,8 @@ function startReattempt() {
   state.startTime = Date.now();
   state.isReattempt = true;
   state.reviseInfo = null;
+  state.bgImageCache = new Map();
+  state.bgPrefetchInFlight = new Set();
 
   // This attempt starts with a clean bank. Any new mistake is saved again.
   clearWrongQuestions();
@@ -259,6 +292,8 @@ function selectChapter(chapter) {
   state.startTime = Date.now();
   state.isReattempt = false;
   state.reviseInfo = null;
+  state.bgImageCache = new Map();
+  state.bgPrefetchInFlight = new Set();
 
   renderQuestion();
   goTo('quiz');
@@ -330,6 +365,138 @@ function renderQuestion() {
   }
 
   updateNavButtons();
+  applyQuestionBackground(question, index);
+}
+
+// ── DYNAMIC QUESTION-CARD BACKGROUND IMAGE ───────────────────
+
+/**
+ * Tries several search candidates for a question IN PARALLEL (rather than
+ * one-by-one) and returns the first successful thumbnail URL, preferring
+ * the most relevant candidate if more than one succeeds. This is the main
+ * speed win — a sequential search of N candidates takes roughly N times
+ * as long as the slowest single lookup; doing them together takes about
+ * as long as just one.
+ */
+async function resolveBackgroundImageUrl(question, maxCandidates = 8) {
+  const allCandidates = buildImageQueryCandidates(question);
+  if (allCandidates.length === 0) return null;
+
+  // The chapter/subject name (always the last 1-2 entries) is a
+  // near-guaranteed fallback — it's a real, well-known topic that almost
+  // certainly has a Wikipedia page. Text-heavy questions can produce many
+  // extracted-entity candidates ahead of it, so naively taking just the
+  // first N would cut it off before it's ever tried. Reserve it a spot.
+  const fallbackLabels = [state.chapter && state.chapter.label, state.subject && state.subject.label]
+    .filter(Boolean);
+  const guaranteed = allCandidates.filter(c => fallbackLabels.includes(c));
+  const specific = allCandidates.filter(c => !fallbackLabels.includes(c));
+
+  const specificSlots = Math.max(0, maxCandidates - guaranteed.length);
+  const batch = [...specific.slice(0, specificSlots), ...guaranteed].slice(0, maxCandidates);
+
+  const results = await Promise.allSettled(
+    batch.map(query => fetchImageFromAnySource(query))
+  );
+
+  // Prefer results in priority order, not fetch-completion order.
+  for (const result of results) {
+    if (result.status === 'fulfilled' && result.value && result.value.thumbnail) {
+      return result.value.thumbnail.source;
+    }
+  }
+
+  // Both free, unlimited sources came up empty for every candidate —
+  // genuinely rare given the guaranteed chapter/subject fallback above,
+  // but as a final safety net, try Openverse once with the single best
+  // candidate (its anonymous quota is limited, so it's used sparingly).
+  if (batch.length > 0) {
+    try {
+      const openversePage = await fetchOpenverseThumbnail(batch[0]);
+      if (openversePage && openversePage.thumbnail) {
+        return openversePage.thumbnail.source;
+      }
+    } catch (error) {
+      // Openverse unreachable/rate-limited — fine, we simply show no image.
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Gives the question card an ambient background photo related to the
+ * question's main keyword (reusing the same entity-extraction + Wikipedia
+ * lookup used by the "Image" button), with a dark scrim so the question
+ * text stays readable over any photo. Results are cached per question
+ * index for the current session so navigating back and forth doesn't
+ * re-fetch, and a stale response can never apply itself to the wrong
+ * question if the user has already moved on by the time it resolves.
+ * Also prefetches the next question's image in the background, so
+ * hitting "Next" usually shows the photo instantly instead of loading.
+ */
+function applyQuestionBackground(question, index) {
+  const shell = document.querySelector('.question-shell');
+  if (!shell) return;
+
+  const cached = state.bgImageCache.get(index);
+
+  if (cached === undefined) {
+    // Not yet looked up — clear any previous image while we fetch, then
+    // kick off the lookup in the background.
+    shell.style.backgroundImage = '';
+    shell.classList.remove('has-bg-image');
+
+    resolveBackgroundImageUrl(question).then(foundUrl => {
+      state.bgImageCache.set(index, foundUrl);
+
+      // Only apply if the person is still looking at this same question —
+      // otherwise this result is stale and should be silently discarded.
+      if (state.current === index) {
+        setQuestionShellBackground(foundUrl);
+      }
+    });
+  } else {
+    setQuestionShellBackground(cached);
+  }
+
+  prefetchAdjacentBackgrounds(index);
+}
+
+function prefetchAdjacentBackgrounds(index) {
+  [index + 1, index - 1].forEach(neighborIndex => {
+    const neighborQuestion = state.questions[neighborIndex];
+    if (!neighborQuestion) return;
+    if (state.bgImageCache.has(neighborIndex)) return;
+    if (state.bgPrefetchInFlight.has(neighborIndex)) return;
+
+    state.bgPrefetchInFlight.add(neighborIndex);
+
+    resolveBackgroundImageUrl(neighborQuestion).then(foundUrl => {
+      state.bgImageCache.set(neighborIndex, foundUrl);
+      state.bgPrefetchInFlight.delete(neighborIndex);
+
+      // Preload the actual image bytes too, so if the person navigates
+      // there next, the browser already has it cached and paints instantly.
+      if (foundUrl) {
+        const preload = new Image();
+        preload.src = foundUrl;
+      }
+    });
+  });
+}
+
+function setQuestionShellBackground(url) {
+  const shell = document.querySelector('.question-shell');
+  if (!shell) return;
+
+  if (url) {
+    shell.style.backgroundImage = `url("${url}")`;
+    shell.classList.add('has-bg-image');
+  } else {
+    shell.style.backgroundImage = '';
+    shell.classList.remove('has-bg-image');
+  }
 }
 
 function answer(chosenIndex) {
@@ -599,6 +766,8 @@ function submitRevise() {
   state.startTime = Date.now();
   state.isReattempt = false;
   state.reviseInfo = { from, to, loops, rangeSize: rangeSlice.length };
+  state.bgImageCache = new Map();
+  state.bgPrefetchInFlight = new Set();
 
   closeReviseModal();
   renderQuestion();
@@ -747,7 +916,100 @@ async function fetchWikipediaThumbnail(query) {
   const pages = data.query && data.query.pages;
   const page = pages ? Object.values(pages)[0] : null;
 
-  return page && page.thumbnail && page.thumbnail.source ? page : null;
+  if (!page || !page.thumbnail || !page.thumbnail.source) return null;
+
+  return {
+    title: page.title,
+    thumbnail: { source: page.thumbnail.source },
+    fullurl: page.fullurl || `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title)}`,
+    sourceLabel: 'Wikipedia'
+  };
+}
+
+/**
+ * Wikipedia's "page image" is just the one photo editors picked for an
+ * article's infobox — plenty of valid topics (temples, artifacts, minor
+ * rulers) have a Wikipedia article with no such image, even though real
+ * photos of them exist on Wikimedia. Commons indexes millions of
+ * individual images directly (searching actual file titles/descriptions
+ * in the File: namespace), so it catches a lot that Wikipedia's page
+ * search misses.
+ */
+async function fetchCommonsThumbnail(query) {
+  const apiUrl =
+    'https://commons.wikimedia.org/w/api.php' +
+    '?action=query&generator=search' +
+    `&gsrsearch=${encodeURIComponent(query)}` +
+    '&gsrnamespace=6&gsrlimit=1' +
+    '&prop=imageinfo&iiprop=url' +
+    '&iiurlwidth=640&format=json&origin=*';
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const pages = data.query && data.query.pages;
+  const page = pages ? Object.values(pages)[0] : null;
+  const info = page && page.imageinfo && page.imageinfo[0];
+
+  if (!info || (!info.thumburl && !info.url)) return null;
+
+  const cleanTitle = (page.title || '')
+    .replace(/^File:/, '')
+    .replace(/\.(jpg|jpeg|png|gif|svg|tiff?|webp)$/i, '')
+    .replace(/[_-]+/g, ' ')
+    .trim();
+
+  return {
+    title: cleanTitle || query,
+    thumbnail: { source: info.thumburl || info.url },
+    fullurl: `https://commons.wikimedia.org/wiki/${encodeURIComponent(page.title)}`,
+    sourceLabel: 'Wikimedia Commons'
+  };
+}
+
+/**
+ * Searches Wikipedia and Wikimedia Commons for the same query IN PARALLEL
+ * and returns whichever succeeds first (preferring Wikipedia when both
+ * do, since an article thumbnail is usually more clearly "the" subject
+ * than an arbitrary Commons file). This roughly doubles the hit rate
+ * compared to Wikipedia alone, at no extra latency since both requests
+ * fire together.
+ */
+/**
+ * Last-resort third source. Openverse aggregates CC-licensed/public-domain
+ * images from many providers (Flickr Commons, museums, Europeana, etc.),
+ * needs no API key for anonymous use, but its anonymous tier is
+ * rate-limited (~100 requests/hour) — so unlike Wikipedia/Commons this is
+ * only touched when both of those come up completely empty, not fired on
+ * every candidate.
+ */
+async function fetchOpenverseThumbnail(query) {
+  const apiUrl =
+    'https://api.openverse.org/v1/images/' +
+    `?q=${encodeURIComponent(query)}&page_size=1`;
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  const result = data.results && data.results[0];
+
+  if (!result || (!result.thumbnail && !result.url)) return null;
+
+  return {
+    title: result.title || query,
+    thumbnail: { source: result.thumbnail || result.url },
+    fullurl: result.foreign_landing_url || result.url,
+    sourceLabel: 'Openverse'
+  };
+}
+
+async function fetchImageFromAnySource(query) {
+  const [wiki, commons] = await Promise.allSettled([
+    fetchWikipediaThumbnail(query),
+    fetchCommonsThumbnail(query)
+  ]);
+
+  if (wiki.status === 'fulfilled' && wiki.value) return wiki.value;
+  if (commons.status === 'fulfilled' && commons.value) return commons.value;
+  return null;
 }
 
 async function openQuestionImage() {
@@ -770,10 +1032,10 @@ async function openQuestionImage() {
     const results = [];
     const seenTitles = new Set();
     const maxResults = 4;
-    const maxAttempts = 10; // safety cap on total network calls
+    const maxAttempts = 10; // safety cap on total candidates tried
 
     for (let i = 0; i < candidates.length && i < maxAttempts && results.length < maxResults; i++) {
-      const page = await fetchWikipediaThumbnail(candidates[i]);
+      const page = await fetchImageFromAnySource(candidates[i]);
 
       if (page) {
         const key = page.title.toLowerCase();
@@ -781,6 +1043,20 @@ async function openQuestionImage() {
           seenTitles.add(key);
           results.push(page);
         }
+      }
+    }
+
+    // Both free, unlimited sources found nothing at all — try Openverse
+    // once as a final safety net (its anonymous quota is limited, so it's
+    // only touched when genuinely needed).
+    if (results.length === 0 && candidates.length > 0) {
+      try {
+        const openversePage = await fetchOpenverseThumbnail(candidates[0]);
+        if (openversePage) {
+          results.push(openversePage);
+        }
+      } catch (error) {
+        // Openverse unreachable/rate-limited — fine, we'll just show "no image".
       }
     }
 
@@ -816,6 +1092,7 @@ function renderImageResults(results) {
 
   if (results.length === 1) {
     const page = results[0];
+    const sourceName = page.sourceLabel || 'Wikipedia';
     titleEl.textContent = page.title;
     body.innerHTML = `
       <img
@@ -829,8 +1106,8 @@ function renderImageResults(results) {
         target="_blank"
         rel="noopener noreferrer"
         class="image-modal-source"
-      >View on Wikipedia →</a>
-      <p class="image-modal-attribution">Image via Wikipedia</p>
+      >View on ${escapeHtml(sourceName)} →</a>
+      <p class="image-modal-attribution">Image via ${escapeHtml(sourceName)}</p>
     `;
     return;
   }
@@ -854,12 +1131,13 @@ function renderImageResults(results) {
           <span class="image-grid-caption">${escapeHtml(page.title)}</span>
         </a>
       `
+
     )
     .join('');
 
   body.innerHTML = `
     <div class="image-grid">${itemsHtml}</div>
-    <p class="image-modal-attribution">Images via Wikipedia</p>
+    <p class="image-modal-attribution">Images via Wikipedia & Wikimedia Commons</p>
   `;
 }
 
@@ -870,6 +1148,8 @@ function closeImageModal() {
 // ── INITIALISATION ───────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
   const gotoInput = document.getElementById('goto-input');
   const gotoModal = document.getElementById('goto-modal');
 
@@ -1022,8 +1302,13 @@ function animateScoreRing(targetPercentage, color) {
   const duration = 1100;
   const startTime = performance.now();
 
+  // Read the theme-aware "empty segment" color live, so the ring looks
+  // correct in both light and dark mode without hardcoding a hex value.
+  const trackColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--opt-bg').trim() || '#f1f3f7';
+
   ring.style.background =
-    `conic-gradient(${color} 0 0%, #f1f3f7 0%)`;
+    `conic-gradient(${color} 0 0%, ${trackColor} 0%)`;
   pctText.textContent = '0%';
 
   function step(now) {
@@ -1032,14 +1317,14 @@ function animateScoreRing(targetPercentage, color) {
     const current = targetPercentage * eased;
 
     ring.style.background =
-      `conic-gradient(${color} 0 ${current}%, #f1f3f7 ${current}%)`;
+      `conic-gradient(${color} 0 ${current}%, ${trackColor} ${current}%)`;
     pctText.textContent = Math.round(current) + '%';
 
     if (t < 1) {
       requestAnimationFrame(step);
     } else {
       ring.style.background =
-        `conic-gradient(${color} 0 ${targetPercentage}%, #f1f3f7 ${targetPercentage}%)`;
+        `conic-gradient(${color} 0 ${targetPercentage}%, ${trackColor} ${targetPercentage}%)`;
       pctText.textContent = targetPercentage + '%';
     }
   }
