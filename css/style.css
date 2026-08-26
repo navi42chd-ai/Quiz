@@ -7,14 +7,67 @@
 :root {
   --ink: #182033;
   --muted: #687086;
+  --muted-soft: #aab0bd;
   --line: #e5e7ef;
   --paper: #ffffff;
   --bg: #f5f6fb;
   --accent: #4f46e5;
   --accent2: #7c3aed;
+  --accent-soft: #a5b4fc;
+  --accent-soft-2: #c7d2fe;
+  --accent-tint: #eef2ff;
+  --surface-2: #f8f9fb;
+  --surface-hover: #f8f7ff;
+  --opt-bg: #f1f3f7;
+  --track-bg: #eceef3;
   --green: #0f9f6e;
   --red: #dc3f54;
+  --overlay: rgba(15, 23, 42, 0.48);
+  --shadow-sm: 0 8px 28px rgba(30, 41, 59, 0.05);
+  --shadow-md: 0 14px 45px rgba(30, 41, 59, 0.07);
   --shadow: 0 18px 55px rgba(30, 41, 59, 0.1);
+  --body-radial-tint: #ede9fe;
+  --quiz-bg-1: #f8f9fd;
+  --quiz-bg-2: #eef1f7;
+  --quiz-top-bg: rgba(255, 255, 255, 0.94);
+  --card-translucent: rgba(255, 255, 255, 0.92);
+  --qcard-overlay: linear-gradient(180deg, rgba(8, 11, 20, 0.66), rgba(8, 11, 20, 0.9));
+  --qcard-light-text: #f6f7fb;
+  --qcard-light-muted: #cdd2e6;
+
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --ink: #eef1f8;
+  --muted: #9aa3bb;
+  --muted-soft: #6b7390;
+  --line: #2a3348;
+  --paper: #171d2d;
+  --bg: #0b0f1a;
+  --accent: #818cf8;
+  --accent2: #a78bfa;
+  --accent-soft: #6366f1;
+  --accent-soft-2: #454b7c;
+  --accent-tint: #1f2540;
+  --surface-2: #1c2336;
+  --surface-hover: #212a44;
+  --opt-bg: #212a44;
+  --track-bg: #212a44;
+  --green: #34d399;
+  --red: #f87171;
+  --overlay: rgba(2, 6, 16, 0.72);
+  --shadow-sm: 0 8px 28px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 14px 45px rgba(0, 0, 0, 0.4);
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.5);
+  --body-radial-tint: #241f3d;
+  --quiz-bg-1: #10162a;
+  --quiz-bg-2: #0b0f1a;
+  --quiz-top-bg: rgba(23, 29, 45, 0.9);
+  --card-translucent: rgba(23, 29, 45, 0.88);
+  --qcard-overlay: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.88));
+
+  color-scheme: dark;
 }
 
 html {
@@ -27,12 +80,18 @@ body {
   font-family: Manrope, system-ui, sans-serif;
   font-size: 16px;
   background:
-    radial-gradient(circle at top right, #ede9fe 0, transparent 32%),
+    radial-gradient(circle at top right, var(--body-radial-tint) 0, transparent 32%),
     var(--bg);
   color: var(--ink);
   min-height: 100vh;
   line-height: 1.5;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+body,
+body * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 button,
@@ -88,6 +147,35 @@ textarea {
   font-weight: 800;
 }
 
+.theme-toggle {
+  margin-left: auto;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-soft);
+  background: var(--surface-hover);
+}
+
+.theme-toggle-inline {
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  padding: 7px 9px;
+  font-size: 16px;
+}
+
 .screen {
   display: none;
 }
@@ -141,7 +229,7 @@ textarea {
   align-items: center;
   gap: 5px;
   border: 1px solid var(--line);
-  background: #f8f9fb;
+  background: var(--surface-2);
   color: var(--ink);
   font-size: 16px;
   font-weight: 700;
@@ -152,8 +240,8 @@ textarea {
 }
 
 .btn-image:hover {
-  border-color: #a5b4fc;
-  background: #f8f7ff;
+  border-color: var(--accent-soft);
+  background: var(--surface-hover);
 }
 
 .card-grid {
@@ -165,12 +253,12 @@ textarea {
 .card {
   position: relative;
   min-height: 150px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--card-translucent);
   border: 1px solid var(--line);
   border-radius: 22px;
   padding: 23px;
   cursor: pointer;
-  box-shadow: 0 8px 28px rgba(30, 41, 59, 0.05);
+  box-shadow: var(--shadow-sm);
   transition: 0.2s ease;
   overflow: hidden;
 }
@@ -186,7 +274,7 @@ textarea {
 .card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow);
-  border-color: #c7d2fe;
+  border-color: var(--accent-soft-2);
 }
 
 .card-icon {
@@ -196,7 +284,7 @@ textarea {
   display: grid;
   place-items: center;
   font-size: 16px;
-  background: #eef2ff;
+  background: var(--accent-tint);
   margin-bottom: 17px;
 }
 
@@ -219,7 +307,7 @@ textarea {
   width: 34px;
   height: 34px;
   border-radius: 11px;
-  background: #eef2ff;
+  background: var(--accent-tint);
   color: var(--accent);
   display: grid;
   place-items: center;
@@ -244,7 +332,7 @@ textarea {
 }
 
 .bc-sep {
-  color: #aab0bd;
+  color: var(--muted-soft);
   font-size: 16px;
 }
 
@@ -265,7 +353,7 @@ textarea {
   height: 64px;
   display: grid;
   place-items: center;
-  background: #eef2ff;
+  background: var(--accent-tint);
   border-radius: 19px;
   font-size: 16px;
 }
@@ -281,7 +369,7 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
-  background: linear-gradient(180deg, #f8f9fd, #eef1f7);
+  background: linear-gradient(180deg, var(--quiz-bg-1), var(--quiz-bg-2));
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
@@ -289,7 +377,7 @@ textarea {
 
 .quiz-top {
   min-width: 0;
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--quiz-top-bg);
   backdrop-filter: blur(14px);
   padding: 10px max(12px, calc((100vw - 900px) / 2));
   border-bottom: 1px solid var(--line);
@@ -330,7 +418,7 @@ textarea {
   align-items: center;
   gap: 5px;
   border: 1px solid var(--line);
-  background: #ffffff;
+  background: var(--paper);
   border-radius: 9px;
   padding: 7px 10px;
   color: var(--ink);
@@ -376,7 +464,7 @@ textarea {
 
 .prog-track {
   height: 4px;
-  background: #eceef3;
+  background: var(--track-bg);
   border-radius: 99px;
   margin-top: 8px;
   overflow: hidden;
@@ -401,17 +489,84 @@ textarea {
   width: min(820px, 100%);
   height: 100%;
   margin: auto;
-  background: #ffffff;
+  background: var(--paper);
+  background-size: cover;
+  background-position: center;
   border: 1px solid var(--line);
   border-radius: clamp(16px, 2.2vw, 24px);
   padding:
     clamp(14px, 2.6vh, 28px)
     clamp(14px, 3vw, 34px);
-  box-shadow: 0 14px 45px rgba(30, 41, 59, 0.07);
+  box-shadow: var(--shadow-md);
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
   gap: clamp(8px, 1.7vh, 16px);
   overflow: hidden;
+}
+
+/* Dynamic background image (fetched per-question) + dark scrim, so the
+   photo and the text stay readable together regardless of the image's
+   own brightness or which light/dark theme is active. */
+.question-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: var(--qcard-overlay);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.question-shell.has-bg-image::before {
+  opacity: 1;
+}
+
+.question-shell > * {
+  position: relative;
+  z-index: 1;
+}
+
+.question-shell.has-bg-image .q-kicker,
+.question-shell.has-bg-image .q-text {
+  color: var(--qcard-light-text);
+}
+
+.question-shell.has-bg-image .q-kicker {
+  color: #c7d2fe;
+}
+
+/* Let the background photo show through the option buttons too, instead
+   of them sitting as solid opaque blocks on top of it. The overlay above
+   is darkened enough that text stays legible either way. */
+.question-shell.has-bg-image .option-btn {
+  background: rgba(10, 14, 24, 0.32);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--qcard-light-text);
+}
+
+.question-shell.has-bg-image .option-btn:hover:not(:disabled) {
+  background: rgba(10, 14, 24, 0.48);
+  border-color: rgba(199, 210, 254, 0.6);
+}
+
+.question-shell.has-bg-image .opt-label {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--qcard-light-text);
+}
+
+/* Correct/wrong feedback keeps its green/red identity, just as a
+   translucent tint instead of a solid pastel block, so it blends with
+   the photo the same way the rest of the card now does. */
+.question-shell.has-bg-image .option-btn.correct,
+.question-shell.has-bg-image .option-btn.reveal {
+  background: rgba(52, 211, 153, 0.28);
+  border-color: rgba(110, 231, 183, 0.7);
+}
+
+.question-shell.has-bg-image .option-btn.wrong {
+  background: rgba(248, 113, 113, 0.28);
+  border-color: rgba(253, 164, 175, 0.7);
 }
 
 .q-text {
@@ -446,7 +601,7 @@ textarea {
     clamp(10px, 1.8vw, 16px);
   border: 1.5px solid var(--line);
   border-radius: clamp(10px, 1.5vw, 15px);
-  background: #ffffff;
+  background: var(--paper);
   color: var(--ink);
   font-size: 16px;
   font-weight: 600;
@@ -468,15 +623,15 @@ textarea {
 }
 
 .option-btn:hover:not(:disabled) {
-  border-color: #a5b4fc;
-  background: #f8f7ff;
+  border-color: var(--accent-soft);
+  background: var(--surface-hover);
 }
 
 .opt-label {
   flex: 0 0 clamp(27px, 3.2vw, 34px);
   height: clamp(27px, 3.2vw, 34px);
   border-radius: 9px;
-  background: #f1f3f7;
+  background: var(--opt-bg);
   display: grid;
   place-items: center;
   font-size: 16px;
@@ -504,6 +659,21 @@ textarea {
 .option-btn.wrong .opt-label {
   background: var(--red);
   color: #ffffff;
+}
+
+/* Dark theme: the pale pastel green/red washes read fine on a light
+   card, but on a dark card they'd leave light text nearly invisible.
+   Same green/red identity, just a background tint that actually works
+   against a dark surface — the semantic colors themselves are untouched. */
+html[data-theme="dark"] .option-btn.correct,
+html[data-theme="dark"] .option-btn.reveal {
+  background: rgba(52, 211, 153, 0.16);
+  border-color: rgba(52, 211, 153, 0.55);
+}
+
+html[data-theme="dark"] .option-btn.wrong {
+  background: rgba(248, 113, 113, 0.16);
+  border-color: rgba(248, 113, 113, 0.55);
 }
 
 .option-btn.shake {
@@ -550,7 +720,7 @@ textarea {
   gap: 9px;
   padding: 9px max(12px, calc((100vw - 820px) / 2));
   padding-bottom: max(9px, env(safe-area-inset-bottom));
-  background: #ffffff;
+  background: var(--paper);
   border-top: 1px solid var(--line);
 }
 
@@ -569,7 +739,7 @@ textarea {
 }
 
 .btn-outline {
-  background: #ffffff;
+  background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--line);
 }
@@ -586,7 +756,7 @@ textarea {
   right: 12px;
   z-index: 80;
   border: 1px solid #fecdd3;
-  background: #ffffff;
+  background: var(--paper);
   color: #be123c;
   border-radius: 999px;
   padding: 8px 12px;
@@ -610,7 +780,7 @@ textarea {
 .result-card {
   max-width: 850px;
   margin: 35px auto 0;
-  background: #ffffff;
+  background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 28px;
   padding: 36px;
@@ -627,9 +797,9 @@ textarea {
   margin: auto;
   background: conic-gradient(
     var(--accent) 0 0%,
-    #f1f3f7 0%
+    var(--opt-bg) 0%
   );
-  border: 9px solid #ffffff;
+  border: 9px solid var(--paper);
   box-shadow: 0 0 0 1px var(--line);
   transform: scale(0.85);
   opacity: 0;
@@ -669,7 +839,7 @@ textarea {
 
 .stat-box {
   padding: 14px 7px;
-  background: #f8f9fb;
+  background: var(--surface-2);
   border-radius: 14px;
   opacity: 0;
 }
@@ -725,7 +895,7 @@ textarea {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.48);
+  background: var(--overlay);
   display: none;
   place-items: center;
   z-index: 100;
@@ -739,7 +909,7 @@ textarea {
 
 .modal-box {
   width: min(390px, 100%);
-  background: #ffffff;
+  background: var(--paper);
   border-radius: 22px;
   padding: 26px;
   box-shadow: var(--shadow);
@@ -769,7 +939,7 @@ textarea {
   height: 32px;
   border-radius: 50%;
   border: none;
-  background: #f1f3f7;
+  background: var(--opt-bg);
   color: var(--ink);
   font-weight: 800;
   font-size: 16px;
@@ -779,7 +949,7 @@ textarea {
 }
 
 .image-modal-close:hover {
-  background: #e5e7ef;
+  background: var(--line);
 }
 
 .image-modal-body {
@@ -825,15 +995,15 @@ textarea {
 }
 
 .image-grid-item:hover {
-  border-color: #a5b4fc;
-  background: #f8f7ff;
+  border-color: var(--accent-soft);
+  background: var(--surface-hover);
 }
 
 .image-grid-img {
   width: 100%;
   height: 120px;
   object-fit: contain;
-  background: #f1f3f7;
+  background: var(--opt-bg);
   border-radius: 10px;
 }
 
@@ -883,7 +1053,7 @@ textarea {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 3px solid #e5e7ef;
+  border: 3px solid var(--line);
   border-top-color: var(--accent);
   animation: imageSpin 0.8s linear infinite;
 }
@@ -902,7 +1072,7 @@ textarea {
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: #eef2ff;
+  background: var(--accent-tint);
   color: var(--accent);
   display: grid;
   place-items: center;
