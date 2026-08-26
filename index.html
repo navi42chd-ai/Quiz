@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#4f46e5" />
   <title>QuizHub — Practice MCQs</title>
+  <script>
+    // Apply the saved (or system-preferred) theme before first paint,
+    // so there's no flash of the wrong theme on load.
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('quizhub-theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,6 +41,7 @@
       <div class="logo">Quiz<span>Hub</span></div>
       <div class="mini-tag">SSC PRACTICE</div>
     </div>
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
   </header>
 
   <section id="screen-subject" class="screen">
@@ -55,6 +66,7 @@
     <div class="quiz-top">
       <div class="quiz-title-row">
         <nav class="breadcrumb" id="quiz-breadcrumb"></nav>
+        <button class="theme-toggle theme-toggle-inline" onclick="toggleTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
         <button class="btn-goto btn-revise" onclick="openReviseModal()" title="Revise a range of questions"><span class="btn-icon">🔁</span><span class="btn-label">Revise</span></button>
         <button class="btn-goto" onclick="openGotoModal()" title="Jump to a question"><span class="btn-icon">🗺️</span><span class="btn-label">Question map</span></button>
       </div>
