@@ -754,11 +754,20 @@ function submitRevise() {
   const rangeSlice = base.slice(from - 1, to);
   let combined = [];
 
-  // Reshuffle option order fresh on every lap, so revising the same
-  // questions repeatedly doesn't let you just memorise option positions.
-  for (let lap = 0; lap < loops; lap++) {
-    combined = combined.concat(prepareQuestions(rangeSlice));
-  }
+  // Group repeats by question — Q1 x loops, then Q2 x loops, and so on —
+  // rather than repeating the whole range end-to-end. Each repetition
+  // gets a freshly shuffled option order, so drilling the same question
+  // repeatedly doesn't let you just memorise the button position.
+  rangeSlice.forEach(question => {
+    for (let rep = 0; rep < loops; rep++) {
+      combined.push(randomiseQuestionOptions(question));
+    }
+  });
+
+  // Finish with one full chronological pass through the range, so
+  // everything gets reviewed together at least once after the drilling
+  // above.
+  combined = combined.concat(prepareQuestions(rangeSlice));
 
   state.questions = combined;
   state.current = 0;
